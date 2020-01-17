@@ -62,6 +62,7 @@ if (params.input_files) {
 process bwaAln1 {
     cpus 8
     memory '6g'
+    tag "${name}"
 
     input:
     	set name, file(fastq)  from input_files_1
@@ -78,6 +79,7 @@ process bwaAln1 {
 process bwaAln2 {
     cpus 8
     memory '6g'
+    tag "${name}"
 
     input:
     	set name, file(fastq)  from input_files_2
@@ -95,6 +97,7 @@ process bwaSampe {
     module 'bioinf/samtools/0.1.16'
     cpus 1
     memory '7g'
+    tag "${name}"
     publishDir "${publish_dir}", mode: "move"
 
     input:
