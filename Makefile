@@ -9,10 +9,19 @@ clean:
 	rm -rf .nextflow*
 
 build-docker:
-	docker build -t tron-bioinformatics/tronflow-bwa:1.0.0 .
+	docker build -t tron-bioinformatics/tronflow-bwa:1.1.0 .
 
 test-docker:
-	/home/priesgo/bin/nextflow main.nf --input_files test_data/test_input.txt -profile docker --reference `pwd`/test_data/ucsc.hg19.minimal.fasta
+	nextflow main.nf --input_files test_data/test_input_paired.txt -profile docker --reference `pwd`/test_data/ucsc.hg19.minimal.fasta
 
-test-conda:
-	nextflow main.nf --input_files test_data/test_input.txt -profile conda --reference `pwd`/test_data/ucsc.hg19.minimal.fasta
+test-conda-aln-paired:
+	nextflow main.nf --input_files test_data/test_input_paired.txt -profile conda --reference `pwd`/test_data/ucsc.hg19.minimal.fasta
+
+test-conda-aln-single:
+	nextflow main.nf --input_files test_data/test_input_single.txt -profile conda --reference `pwd`/test_data/ucsc.hg19.minimal.fasta --library single
+
+test-conda-mem-paired:
+	nextflow main.nf --input_files test_data/test_input_paired.txt -profile conda --reference `pwd`/test_data/ucsc.hg19.minimal.fasta --algorithm mem
+
+test-conda-mem-single:
+	nextflow main.nf --input_files test_data/test_input_paired.txt -profile conda --reference `pwd`/test_data/ucsc.hg19.minimal.fasta --algorithm mem --library single
