@@ -1,1 +1,9 @@
 .idea
+work
+output
+.nextflow*
+report.html*
+timeline.html*
+trace.txt*
+dag.dot*
+*.swp
