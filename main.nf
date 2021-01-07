@@ -94,7 +94,6 @@ process bwaAln2 {
 }
 
 process bwaSampe {
-    module 'bioinf/samtools/0.1.16'
     cpus 1
     memory '7g'
     tag "${name}"
