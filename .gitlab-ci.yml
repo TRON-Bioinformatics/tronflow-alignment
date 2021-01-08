@@ -2,8 +2,10 @@ image: nfcore/base:1.9
 
 # include: '/environment.yml'
 
-#before_script:
+before_script:
     #- conda env create bioconda::bwa=0.7.17 conda-forge::ncurses=5 bioconda::samtools=0.1.16 make=4.2.1 && conda clean -a
+  - wget -qO- get.nextflow.io | bash
+  - sudo mv nextflow /usr/local/bin/
 
 stages:
   - test
