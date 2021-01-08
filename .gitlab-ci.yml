@@ -1,0 +1,22 @@
+image: nfcore/base:1.9
+
+include:
+  - local: '/environment.yml'
+
+before_script:
+  - conda env create -f /environment.yml && conda clean -a
+
+stages:
+  - test
+
+test:
+  stage: test
+  script:
+    - make clean test-conda-aln-single
+    - ll output
+    - make clean test-conda-aln-paired
+    - ll output
+    - make clean test-conda-mem-single
+    - ll output
+    - make clean test-conda-mem-paired
+    - ll output
