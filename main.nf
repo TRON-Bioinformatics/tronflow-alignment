@@ -72,7 +72,7 @@ if (params.algorithm == "aln" && params.library == "paired") {
     }
 
     process bwaAln1 {
-        cpus ${workflow.profile} == 'test' ? 1 : 8
+        cpus "${workflow.profile}" == "test" ? 1 : 8
         memory '6g'
         tag "${name}"
 
@@ -89,7 +89,7 @@ if (params.algorithm == "aln" && params.library == "paired") {
     }
 
     process bwaAln2 {
-        cpus ${workflow.profile} == 'test' ? 1 : 8
+        cpus "${workflow.profile}" == "test" ? 1 : 8
         memory '6g'
         tag "${name}"
 
@@ -137,7 +137,7 @@ else if (params.algorithm == "aln" && params.library == "single") {
     }
 
     process bwaAln {
-        cpus ${workflow.profile} == 'test' ? 1 : 8
+        cpus "${workflow.profile}" == "test" ? 1 : 8
         memory '6g'
         tag "${name}"
 
