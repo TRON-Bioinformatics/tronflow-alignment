@@ -1,0 +1,28 @@
+image: nfcore/base:1.9
+
+# include: '/environment.yml'
+
+before_script:
+  - conda env create conda-forge::openjdk=11.0.8 && conda clean -a
+  - wget -qO- get.nextflow.io | bash
+  - sudo mv nextflow /usr/local/bin/
+
+stages:
+  - test
+
+test:
+  stage: test
+  script:
+    #nextflow run
+    #- make clean test-conda-aln-single
+    - nextflow main.nf -profile test,conda
+    - ll output
+    #- make clean test-conda-aln-paired
+    - nextflow main.nf -profile test,conda --library single
+    - ll output
+    #- make clean test-conda-mem-single
+    - nextflow main.nf -profile test,conda --algorithm mem
+    - ll output
+    #- make clean test-conda-mem-paired
+    - nextflow main.nf -profile test,conda --algorithm mem --library single
+    - ll output
