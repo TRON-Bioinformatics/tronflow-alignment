@@ -1,10 +1,9 @@
 image: nfcore/base:1.9
 
-include:
-  - local: '/environment.yml'
+# include: '/environment.yml'
 
 before_script:
-  - conda env create -f /environment.yml && conda clean -a
+    - conda env create bioconda::bwa=0.7.17 conda-forge::ncurses=5 bioconda::samtools=0.1.16 && conda clean -a
 
 stages:
   - test
