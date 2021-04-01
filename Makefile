@@ -12,7 +12,7 @@ build-docker:
 	docker build -t tron-bioinformatics/tronflow-bwa:1.1.0 .
 
 test-docker:
-	nextflow main.nf --input_files test_data/test_input_paired.txt -profile docker --reference `pwd`/test_data/ucsc.hg19.minimal.fasta
+	nextflow main.nf -profile test,docker --reference `pwd`/test_data/ucsc.hg19.minimal.fasta -with-docker
 
 test-conda-aln-paired:
 	nextflow main.nf -profile test,conda --cpus 1 --memory 2g
