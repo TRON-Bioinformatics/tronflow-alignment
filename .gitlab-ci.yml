@@ -9,7 +9,7 @@ before_script:
   - java -version
   - wget -qO- https://get.nextflow.io | bash && cp nextflow /usr/local/bin/nextflow
   - nextflow help
-  - apt-get update && apt-get add wget
+  - apt-get update && apt-get install wget
   - wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
   - mkdir /root/.conda
   - bash Miniconda3-latest-Linux-x86_64.sh -b
