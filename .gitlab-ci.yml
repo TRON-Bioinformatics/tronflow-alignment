@@ -1,4 +1,4 @@
-image: openjdk/openjdk:11.0.10-jre-buster
+image: openjdk:11.0.10-jre-buster
 
 # include: '/environment.yml'
 
