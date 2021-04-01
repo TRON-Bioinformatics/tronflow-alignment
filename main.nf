@@ -6,6 +6,9 @@ params.reference = "/code/iCaM2/refs/hg19_index_bwa_0.7/hg19_SORTED.fa"
 params.output = false
 params.algorithm = "aln"
 params.library = "paired"
+params.cpus = 8
+params.memory = "8g"
+params.inception = false
 
 publish_dir = 'output'
 
@@ -26,6 +29,9 @@ Optional input:
     * output: the folder where to publish output
     * algorithm: determines the BWA algorithm, either `aln` or `mem` (default `aln`)
     * library: determines whether the sequencing library is paired or single end, either `paired` or `single` (default `paired`)
+    * cpus: determines the number of CPUs for each job, with the exception of bwa sampe and samse steps which are not parallelized (default: 8)
+    * memory: determines the memory required by each job (default: 8g)
+    * inception: if enabled it uses an inception, only valid for BWA aln, it requires a fast file system such as flash (default: false)
 
 Output:
     * A BAM file \${name}.bam
@@ -54,7 +60,7 @@ if (params.library != "paired" && params.library != "single") {
     exit 1, "Unsupported library preparation ${params.library}!"
 }
 
-if (params.algorithm == "aln" && params.library == "paired") {
+if (params.algorithm == "aln" && params.library == "paired" && !params.inception) {
 
     if (params.input_files) {
       Channel
@@ -72,8 +78,8 @@ if (params.algorithm == "aln" && params.library == "paired") {
     }
 
     process bwaAln1 {
-        cpus 8
-        memory '6g'
+        cpus "${params.cpus}"
+        memory "${params.memory}"
         tag "${name}"
 
         input:
@@ -89,8 +95,8 @@ if (params.algorithm == "aln" && params.library == "paired") {
     }
 
     process bwaAln2 {
-        cpus 8
-        memory '6g'
+        cpus "${params.cpus}"
+        memory "${params.memory}"
         tag "${name}"
 
         input:
@@ -107,7 +113,7 @@ if (params.algorithm == "aln" && params.library == "paired") {
 
     process bwaSampe {
         cpus 1
-        memory '7g'
+        memory "${params.memory}"
         tag "${name}"
         publishDir "${publish_dir}", mode: "move"
 
@@ -124,7 +130,7 @@ if (params.algorithm == "aln" && params.library == "paired") {
         """
     }
 }
-else if (params.algorithm == "aln" && params.library == "single") {
+else if (params.algorithm == "aln" && params.library == "single"  && !params.inception) {
 
     if (params.input_files) {
       Channel
@@ -137,8 +143,8 @@ else if (params.algorithm == "aln" && params.library == "single") {
     }
 
     process bwaAln {
-        cpus 8
-        memory '6g'
+        cpus "${params.cpus}"
+        memory "${params.memory}"
         tag "${name}"
 
         input:
@@ -155,7 +161,7 @@ else if (params.algorithm == "aln" && params.library == "single") {
 
     process bwaSamse {
         cpus 1
-        memory '7g'
+        memory "${params.memory}"
         tag "${name}"
         publishDir "${publish_dir}", mode: "move"
 
@@ -172,6 +178,38 @@ else if (params.algorithm == "aln" && params.library == "single") {
         """
     }
 }
+else if (params.algorithm == "aln" && params.library == "paired" && params.inception) {
+
+    if (params.input_files) {
+      Channel
+        .fromPath(params.input_files)
+        .splitCsv(header: ['name', 'fastq1', 'fastq2'], sep: "\t")
+        .map{ row-> tuple(row.name, file(row.fastq1), file(row.fastq2)) }
+        .set { input_files}
+    } else {
+      exit 1, "Input file not specified!"
+    }
+
+    process bwaAlnInception {
+        cpus "${params.cpus}".toInteger() * 2
+        memory "${params.memory}"
+        tag "${name}"
+        publishDir "${publish_dir}", mode: "move"
+
+        input:
+          // joins both channels by key using the first element in the tuple, the name
+          set name, file(fastq1), file(fastq2)  from input_files
+
+        output:
+          set val("${name}"), file("${name}.bam") into sampe_output
+
+        """
+        bwa sampe ${reference} <( bwa aln -t ${params.cpus} ${reference} ${fastq1} ) \
+        <( bwa aln -t ${params.cpus} ${reference} ${fastq2} ) ${fastq1} ${fastq2} \
+        | samtools view -uS - | samtools sort - ${name}
+        """
+    }
+}
 else if (params.algorithm == "mem" && params.library == "paired") {
 
     if (params.input_files) {
@@ -185,8 +223,8 @@ else if (params.algorithm == "mem" && params.library == "paired") {
     }
 
     process bwaMem {
-        cpus 1
-        memory '7g'
+        cpus "${params.cpus}"
+        memory "${params.memory}"
         tag "${name}"
         publishDir "${publish_dir}", mode: "move"
 
@@ -198,7 +236,7 @@ else if (params.algorithm == "mem" && params.library == "paired") {
           set val("${name}"), file("${name}.bam") into sampe_output
 
         """
-        bwa mem ${reference} ${fastq1} ${fastq2} | samtools view -uS - | samtools sort - ${name}
+        bwa mem -t ${task.cpus} ${reference} ${fastq1} ${fastq2} | samtools view -uS - | samtools sort - ${name}
         """
     }
 }
@@ -215,8 +253,8 @@ else if (params.algorithm == "mem" && params.library == "single") {
     }
 
     process bwaMemSe {
-        cpus 1
-        memory '7g'
+        cpus "${params.cpus}"
+        memory "${params.memory}"
         tag "${name}"
         publishDir "${publish_dir}", mode: "move"
 
@@ -228,7 +266,7 @@ else if (params.algorithm == "mem" && params.library == "single") {
           set val("${name}"), file("${name}.bam") into sampe_output
 
         """
-        bwa mem ${reference} ${fastq} | samtools view -uS - | samtools sort - ${name}
+        bwa mem -t ${task.cpus} ${reference} ${fastq} | samtools view -uS - | samtools sort - ${name}
         """
     }
 }
