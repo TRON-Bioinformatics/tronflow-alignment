@@ -12,7 +12,7 @@ before_script:
   - apt-get update && apt-get install wget
   - wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
   - mkdir /root/.conda
-  - bash Miniconda3-latest-Linux-x86_64.sh -b
+  - bash Miniconda3-latest-Linux-x86_64.sh -b && cp conda /usr/local/bin/conda
   - rm -f Miniconda3-latest-Linux-x86_64.sh
   - conda --version
   - which conda
