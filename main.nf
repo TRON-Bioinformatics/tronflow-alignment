@@ -6,6 +6,7 @@ params.reference = "/code/iCaM2/refs/hg19_index_bwa_0.7/hg19_SORTED.fa"
 params.output = false
 params.algorithm = "aln"
 params.library = "paired"
+params.cpus = 8
 
 publish_dir = 'output'
 
@@ -26,6 +27,7 @@ Optional input:
     * output: the folder where to publish output
     * algorithm: determines the BWA algorithm, either `aln` or `mem` (default `aln`)
     * library: determines whether the sequencing library is paired or single end, either `paired` or `single` (default `paired`)
+    * cpus: determines the number of CPUs for each job, with the exception of bwa sampe and samse steps which are not parallelized (default: 8)
 
 Output:
     * A BAM file \${name}.bam
@@ -72,7 +74,7 @@ if (params.algorithm == "aln" && params.library == "paired") {
     }
 
     process bwaAln1 {
-        cpus 8
+        cpus "${params.cpus}"
         memory '6g'
         tag "${name}"
 
@@ -89,7 +91,7 @@ if (params.algorithm == "aln" && params.library == "paired") {
     }
 
     process bwaAln2 {
-        cpus 8
+        cpus "${params.cpus}"
         memory '6g'
         tag "${name}"
 
@@ -137,7 +139,7 @@ else if (params.algorithm == "aln" && params.library == "single") {
     }
 
     process bwaAln {
-        cpus 8
+        cpus "${params.cpus}"
         memory '6g'
         tag "${name}"
 
@@ -185,7 +187,7 @@ else if (params.algorithm == "mem" && params.library == "paired") {
     }
 
     process bwaMem {
-        cpus 1
+        cpus "${params.cpus}"
         memory '7g'
         tag "${name}"
         publishDir "${publish_dir}", mode: "move"
@@ -198,7 +200,7 @@ else if (params.algorithm == "mem" && params.library == "paired") {
           set val("${name}"), file("${name}.bam") into sampe_output
 
         """
-        bwa mem ${reference} ${fastq1} ${fastq2} | samtools view -uS - | samtools sort - ${name}
+        bwa mem -t ${task.cpus} ${reference} ${fastq1} ${fastq2} | samtools view -uS - | samtools sort - ${name}
         """
     }
 }
@@ -215,7 +217,7 @@ else if (params.algorithm == "mem" && params.library == "single") {
     }
 
     process bwaMemSe {
-        cpus 1
+        cpus "${params.cpus}"
         memory '7g'
         tag "${name}"
         publishDir "${publish_dir}", mode: "move"
@@ -228,7 +230,7 @@ else if (params.algorithm == "mem" && params.library == "single") {
           set val("${name}"), file("${name}.bam") into sampe_output
 
         """
-        bwa mem ${reference} ${fastq} | samtools view -uS - | samtools sort - ${name}
+        bwa mem -t ${task.cpus} ${reference} ${fastq} | samtools view -uS - | samtools sort - ${name}
         """
     }
 }

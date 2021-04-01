@@ -3,6 +3,8 @@ image: nfcore/base:1.9
 # include: '/environment.yml'
 
 before_script:
+  - which java
+  - which nextflow
   - conda env create conda-forge::openjdk=11.0.8 && conda clean -a
   - wget -qO- get.nextflow.io | bash
   - sudo mv nextflow /usr/local/bin/
