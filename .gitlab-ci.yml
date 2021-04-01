@@ -2,8 +2,8 @@ image: nextflow/nextflow:20.10.0
 
 # include: '/environment.yml'
 
-variables:
-  PATH: "/root/miniconda3/bin:${PATH}"
+#variables:
+#  PATH: "/root/miniconda3/bin:${PATH}"
 
 before_script:
   - java -version
@@ -13,7 +13,7 @@ before_script:
     && mkdir /root/.conda \
     && bash Miniconda3-latest-Linux-x86_64.sh -b \
     && rm -f Miniconda3-latest-Linux-x86_64.sh
-  - conda --version
+  - /root/miniconda3/bin/conda --version
 
 stages:
   - test
