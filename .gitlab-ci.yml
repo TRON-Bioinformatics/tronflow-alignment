@@ -1,4 +1,4 @@
-image: nextflow/nextflow:20.10.0
+image: openjdk/openjdk:11.0.10-jre-buster
 
 # include: '/environment.yml'
 
@@ -7,8 +7,9 @@ image: nextflow/nextflow:20.10.0
 
 before_script:
   - java -version
+  - wget -qO- https://get.nextflow.io | bash
   - nextflow help
-  - apk update && apk add wget
+  - apt-get update && apt-get add wget
   - wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
   - mkdir /root/.conda
   - bash Miniconda3-latest-Linux-x86_64.sh -b
