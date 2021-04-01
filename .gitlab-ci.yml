@@ -2,8 +2,8 @@ image: nextflow/nextflow:20.10.0
 
 # include: '/environment.yml'
 
-#variables:
-#  PATH: "/root/miniconda3/bin:${PATH}"
+variables:
+  PATH: "/root/miniconda3/bin:${PATH}"
 
 before_script:
   - java -version
