@@ -17,6 +17,9 @@ test-docker:
 test-conda-aln-paired:
 	nextflow main.nf -profile test,conda --cpus 1 --memory 2g
 
+test-conda-aln-paired-inception:
+	nextflow main.nf -profile test,conda --cpus 2 --memory 2g --inception
+
 test-conda-aln-single:
 	nextflow main.nf -profile test,conda --library single  --cpus 1  --memory 2g
 

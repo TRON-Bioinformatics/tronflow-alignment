@@ -22,3 +22,4 @@ test:
     - make clean test-conda-aln-paired
     - make clean test-conda-mem-single
     - make clean test-conda-mem-paired
+    - make clean test-conda-aln-paired-inception
