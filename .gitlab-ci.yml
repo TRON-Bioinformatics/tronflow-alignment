@@ -8,8 +8,7 @@ image: nextflow/nextflow:20.10.0
 before_script:
   - java -version
   - nextflow help
-  - apt-get update
-  - apt-get install -y wget
+  - apk update && apk add wget
   - wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
     && mkdir /root/.conda \
     && bash Miniconda3-latest-Linux-x86_64.sh -b \
