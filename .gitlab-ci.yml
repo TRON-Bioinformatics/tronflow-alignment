@@ -1,13 +1,10 @@
-image: nfcore/base:1.9
+image: nextflow/nextflow:20.10.0
 
 # include: '/environment.yml'
 
 before_script:
   - java -version
   - nextflow help
-  - conda env create conda-forge::openjdk=11.0.8 && conda clean -a
-  - wget -qO- get.nextflow.io | bash
-  - sudo mv nextflow /usr/local/bin/
 
 stages:
   - test
