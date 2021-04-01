@@ -7,6 +7,7 @@ params.output = false
 params.algorithm = "aln"
 params.library = "paired"
 params.cpus = 8
+params.memory = "8g"
 
 publish_dir = 'output'
 
@@ -28,6 +29,7 @@ Optional input:
     * algorithm: determines the BWA algorithm, either `aln` or `mem` (default `aln`)
     * library: determines whether the sequencing library is paired or single end, either `paired` or `single` (default `paired`)
     * cpus: determines the number of CPUs for each job, with the exception of bwa sampe and samse steps which are not parallelized (default: 8)
+    * memory: determines the memory required by each job (default: 8g)
 
 Output:
     * A BAM file \${name}.bam
@@ -75,7 +77,7 @@ if (params.algorithm == "aln" && params.library == "paired") {
 
     process bwaAln1 {
         cpus "${params.cpus}"
-        memory '6g'
+        memory "${params.memory}"
         tag "${name}"
 
         input:
@@ -92,7 +94,7 @@ if (params.algorithm == "aln" && params.library == "paired") {
 
     process bwaAln2 {
         cpus "${params.cpus}"
-        memory '6g'
+        memory "${params.memory}"
         tag "${name}"
 
         input:
@@ -109,7 +111,7 @@ if (params.algorithm == "aln" && params.library == "paired") {
 
     process bwaSampe {
         cpus 1
-        memory '7g'
+        memory "${params.memory}"
         tag "${name}"
         publishDir "${publish_dir}", mode: "move"
 
@@ -140,7 +142,7 @@ else if (params.algorithm == "aln" && params.library == "single") {
 
     process bwaAln {
         cpus "${params.cpus}"
-        memory '6g'
+        memory "${params.memory}"
         tag "${name}"
 
         input:
@@ -157,7 +159,7 @@ else if (params.algorithm == "aln" && params.library == "single") {
 
     process bwaSamse {
         cpus 1
-        memory '7g'
+        memory "${params.memory}"
         tag "${name}"
         publishDir "${publish_dir}", mode: "move"
 
@@ -188,7 +190,7 @@ else if (params.algorithm == "mem" && params.library == "paired") {
 
     process bwaMem {
         cpus "${params.cpus}"
-        memory '7g'
+        memory "${params.memory}"
         tag "${name}"
         publishDir "${publish_dir}", mode: "move"
 
@@ -218,7 +220,7 @@ else if (params.algorithm == "mem" && params.library == "single") {
 
     process bwaMemSe {
         cpus "${params.cpus}"
-        memory '7g'
+        memory "${params.memory}"
         tag "${name}"
         publishDir "${publish_dir}", mode: "move"
 
