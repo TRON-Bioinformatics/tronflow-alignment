@@ -1,5 +1,7 @@
 # TRONflow BWA pipeline
 
+[![DOI](https://zenodo.org/badge/327943420.svg)](https://zenodo.org/badge/latestdoi/327943420)
+
 Nextflow pipeline for the alignment of paired and single end FASTQ files with BWA aln and mem algorithms.
 
 ## Requirements
