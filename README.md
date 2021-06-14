@@ -8,15 +8,15 @@ Nextflow pipeline for the alignment of paired and single end FASTQ files with BW
 
 There are two packages that are required for this pipeline. Both of this are preconfigured when using the conda or docker profiles.
 
-- BWA 0.1.17
-- samtools 0.1.19
+- BWA 0.7.17
+- samtools 1.12
 
 
 ## How to run it
 
 Run it from GitHub as follows:
 ```
-nextflow run tron-bioinformatics/tronflow-bwa -r v1.2.0 --input_files $input --output $output --algorithm aln --library paired -profile conda,standard
+nextflow run tron-bioinformatics/tronflow-bwa --input_files $input --output $output --algorithm aln --library paired -profile conda,standard
 ```
 
 Otherwise download the project and run as follows:
