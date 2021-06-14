@@ -119,7 +119,7 @@ if (params.algorithm == "aln" && params.library == "paired" && !params.inception
           set val("${name}"), file("${name}.bam") into sampe_output
 
         """
-        bwa sampe ${params.reference} ${sai1} ${sai2} ${fastq1} ${fastq2} | samtools view -uS - | samtools sort - ${name}
+        bwa sampe ${params.reference} ${sai1} ${sai2} ${fastq1} ${fastq2} | samtools view -uS - | samtools sort - > ${name}.bam
         """
     }
 }
@@ -155,7 +155,7 @@ else if (params.algorithm == "aln" && params.library == "single"  && !params.inc
           set val("${name}"), file("${name}.bam") into samse_output
 
         """
-        bwa samse ${params.reference} ${sai} ${fastq} | samtools view -uS - | samtools sort - ${name}
+        bwa samse ${params.reference} ${sai} ${fastq} | samtools view -uS - | samtools sort - > ${name}.bam
         """
     }
 }
@@ -177,7 +177,7 @@ else if (params.algorithm == "aln" && params.library == "paired" && params.incep
         """
         bwa sampe ${params.reference} <( bwa aln -t ${params.cpus} ${params.reference} ${fastq1} ) \
         <( bwa aln -t ${params.cpus} ${params.reference} ${fastq2} ) ${fastq1} ${fastq2} \
-        | samtools view -uS - | samtools sort - ${name}
+        | samtools view -uS - | samtools sort - > ${name}.bam
         """
     }
 }
@@ -197,7 +197,7 @@ else if (params.algorithm == "mem" && params.library == "paired") {
           set val("${name}"), file("${name}.bam") into sampe_output
 
         """
-        bwa mem -t ${task.cpus} ${params.reference} ${fastq1} ${fastq2} | samtools view -uS - | samtools sort - ${name}
+        bwa mem -t ${task.cpus} ${params.reference} ${fastq1} ${fastq2} | samtools view -uS - | samtools sort - > ${name}.bam
         """
     }
 }
@@ -217,7 +217,7 @@ else if (params.algorithm == "mem" && params.library == "single") {
           set val("${name}"), file("${name}.bam") into sampe_output
 
         """
-        bwa mem -t ${task.cpus} ${params.reference} ${fastq} | samtools view -uS - | samtools sort - ${name}
+        bwa mem -t ${task.cpus} ${params.reference} ${fastq} | samtools view -uS - | samtools sort - > ${name}.bam
         """
     }
 }
