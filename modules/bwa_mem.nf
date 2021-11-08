@@ -1,6 +1,7 @@
 params.cpus = 8
 params.memory = "8g"
 params.reference = false
+params.enable_conda = false
 
 
 process BWA_MEM {
@@ -8,6 +9,8 @@ process BWA_MEM {
     memory "${params.memory}"
     tag "${name}"
     publishDir params.output, mode: "move"
+
+    conda (params.enable_conda ? "bioconda::bwa=0.7.17 bioconda::samtools=1.12" : null)
 
     input:
       // joins both channels by key using the first element in the tuple, the name
@@ -26,6 +29,8 @@ process BWA_MEM_SE {
     memory "${params.memory}"
     tag "${name}"
     publishDir params.output, mode: "move"
+
+    conda (params.enable_conda ? "bioconda::bwa=0.7.17 bioconda::samtools=1.12" : null)
 
     input:
       // joins both channels by key using the first element in the tuple, the name

@@ -1,12 +1,16 @@
 params.memory = "3g"
 params.cpus = 1
 params.output = "."
+params.enable_conda = false
+params.enable_docker = true
 
 
 process FASTP_PAIRED {
     cpus params.cpus
     memory params.memory
     publishDir "${params.output}", mode: "copy", pattern: "*fastp_stats*"
+
+    conda (params.enable_conda ? "bioconda::fastp=0.20.1" : null)
 
     input:
         tuple val(name), file(fastq1), file(fastq2)
@@ -33,6 +37,8 @@ process FASTP_SINGLE {
     cpus params.cpus
     memory params.memory
     publishDir "${params.output}", mode: "copy", pattern: "*fastp_stats*"
+
+    conda (params.enable_conda ? "bioconda::fastp=0.20.1" : null)
 
     input:
         tuple val(name), file(fastq1)

@@ -1,12 +1,15 @@
 params.cpus = 8
 params.memory = "8g"
 params.reference = false
+params.enable_conda = false
 
 
 process BWA_ALN {
     cpus "${params.cpus}"
     memory "${params.memory}"
     tag "${name}"
+
+    conda (params.enable_conda ? "bioconda::bwa=0.7.17 bioconda::samtools=1.12" : null)
 
     input:
         tuple val(name), file(fastq)
@@ -24,6 +27,8 @@ process BWA_SAMPE {
     memory params.memory
     tag "${name}"
     publishDir params.output, mode: "move"
+
+    conda (params.enable_conda ? "bioconda::bwa=0.7.17 bioconda::samtools=1.12" : null)
 
     input:
       // joins both channels by key using the first element in the tuple, the name
@@ -43,6 +48,8 @@ process BWA_SAMSE {
     tag "${name}"
     publishDir params.output, mode: "move"
 
+    conda (params.enable_conda ? "bioconda::bwa=0.7.17 bioconda::samtools=1.12" : null)
+
     input:
       // joins both channels by key using the first element in the tuple, the name
       tuple val(name), file(fastq), file(sai)
@@ -60,6 +67,8 @@ process BWA_ALN_INCEPTION {
     memory "${params.memory}"
     tag "${name}"
     publishDir params.output, mode: "move"
+
+    conda (params.enable_conda ? "bioconda::bwa=0.7.17 bioconda::samtools=1.12" : null)
 
     input:
       // joins both channels by key using the first element in the tuple, the name
