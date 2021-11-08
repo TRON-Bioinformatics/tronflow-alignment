@@ -2,6 +2,7 @@
 
 nextflow.enable.dsl = 2
 
+include { FASTP_PAIRED; FASTP_SINGLE } from './modules/fastp'
 include { BWA_ALN; BWA_ALN as BWA_ALN_2; BWA_SAMPE; BWA_SAMSE; BWA_ALN_INCEPTION } from './modules/bwa_aln'
 include { BWA_MEM; BWA_MEM_SE } from './modules/bwa_mem'
 
@@ -17,6 +18,7 @@ params.library = "paired"
 params.cpus = 8
 params.memory = "8g"
 params.inception = false
+params.skip_trimming = false
 
 
 if (params.help) {
@@ -75,22 +77,46 @@ else if (params.input_files) {
 }
 
 workflow {
-    if (params.algorithm == "aln" && params.library == "paired" && !params.inception) {
-        BWA_ALN(input_files.map {name, fq1, fq2 -> tuple(name, fq1)})
-        BWA_ALN_2(input_files.map {name, fq1, fq2 -> tuple(name, fq2)})
-        BWA_SAMPE(BWA_ALN.out.alignment_output.join(BWA_ALN_2.out.alignment_output))
+    if (params.library == "paired") {
+        if (params.skip_trimming) {
+            trimmed_fastqs = input_files
+        }
+        else {
+            FASTP_PAIRED(input_files)
+            trimmed_fastqs = FASTP_PAIRED.out.trimmed_fastqs
+        }
+        if (params.algorithm == "aln" && !params.inception) {
+            BWA_ALN(trimmed_fastqs.map {name, fq1, fq2 -> tuple(name, fq1)})
+            BWA_ALN_2(trimmed_fastqs.map {name, fq1, fq2 -> tuple(name, fq2)})
+            BWA_SAMPE(BWA_ALN.out.alignment_output.join(BWA_ALN_2.out.alignment_output))
+        }
+        else if (params.algorithm == "aln" && params.inception) {
+            BWA_ALN_INCEPTION(trimmed_fastqs)
+        }
+        else if (params.algorithm == "mem") {
+            BWA_MEM(trimmed_fastqs)
+        }
+        else {
+          exit 1, "Unsupported configuration!"
+        }
     }
-    else if (params.algorithm == "aln" && params.library == "single"  && !params.inception) {
-        BWA_SAMSE(BWA_ALN(input_files))
-    }
-    else if (params.algorithm == "aln" && params.library == "paired" && params.inception) {
-        BWA_ALN_INCEPTION(input_files)
-    }
-    else if (params.algorithm == "mem" && params.library == "paired") {
-        BWA_MEM(input_files)
-    }
-    else if (params.algorithm == "mem" && params.library == "single") {
-        BWA_MEM_SE(input_files)
+    else if (params.library == "single") {
+        if (params.skip_trimming) {
+            trimmed_fastqs = input_files
+        }
+        else {
+            FASTP_SINGLE(input_files)
+            trimmed_fastqs = FASTP_SINGLE.out.trimmed_fastqs
+        }
+        if (params.algorithm == "aln"  && !params.inception) {
+            BWA_SAMSE(BWA_ALN(trimmed_fastqs))
+        }
+        else if (params.algorithm == "mem") {
+            BWA_MEM_SE(trimmed_fastqs)
+        }
+        else {
+          exit 1, "Unsupported configuration!"
+        }
     }
     else {
       exit 1, "Unsupported configuration!"

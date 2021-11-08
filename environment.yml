@@ -8,3 +8,4 @@ channels:
 dependencies:
   - bioconda::bwa=0.7.17
   - bioconda::samtools=1.12
+  - bioconda::fastp=0.20.1

@@ -15,3 +15,4 @@ test:
 	bash tests/run_test_5.sh
 	bash tests/run_test_6.sh
 	bash tests/run_test_7.sh
+	bash tests/run_test_8.sh
