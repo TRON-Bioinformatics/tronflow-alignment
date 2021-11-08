@@ -2,8 +2,7 @@
 
 nextflow.enable.dsl = 2
 
-include { BWA_ALN_SINGLE; BWA_ALIGN_PAIRED as BWA_ALIGN_PAIRED_1;  BWA_ALIGN_PAIRED as BWA_ALIGN_PAIRED_2;
-            BWA_SAMPE; BWA_SAMSE; BWA_ALN_INCEPTION } from './modules/bwa_aln'
+include { BWA_ALN; BWA_ALN as BWA_ALN_2; BWA_SAMPE; BWA_SAMSE; BWA_ALN_INCEPTION } from './modules/bwa_aln'
 include { BWA_MEM; BWA_MEM_SE } from './modules/bwa_mem'
 
 params.help= false
@@ -77,12 +76,12 @@ else if (params.input_files) {
 
 workflow {
     if (params.algorithm == "aln" && params.library == "paired" && !params.inception) {
-        BWA_ALIGN_PAIRED_1(input_files)
-        BWA_ALIGN_PAIRED_2(input_files)
-        BWA_SAMPE(BWA_ALIGN_PAIRED_1.out.alignment_output.join(BWA_ALIGN_PAIRED_2.out.alignment_output))
+        BWA_ALN(input_files.map {name, fq1, fq2 -> tuple(name, fq1)})
+        BWA_ALN_2(input_files.map {name, fq1, fq2 -> tuple(name, fq2)})
+        BWA_SAMPE(BWA_ALN.out.alignment_output.join(BWA_ALN_2.out.alignment_output))
     }
     else if (params.algorithm == "aln" && params.library == "single"  && !params.inception) {
-        BWA_SAMSE(BWA_ALN_SINGLE(input_files))
+        BWA_SAMSE(BWA_ALN(input_files))
     }
     else if (params.algorithm == "aln" && params.library == "paired" && params.inception) {
         BWA_ALN_INCEPTION(input_files)

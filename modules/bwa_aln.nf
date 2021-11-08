@@ -3,7 +3,7 @@ params.memory = "8g"
 params.reference = false
 
 
-process BWA_ALN_SINGLE {
+process BWA_ALN {
     cpus "${params.cpus}"
     memory "${params.memory}"
     tag "${name}"
@@ -16,22 +16,6 @@ process BWA_ALN_SINGLE {
 
     """
     bwa aln -t ${task.cpus} ${params.reference} ${fastq} > ${fastq.baseName}.sai
-    """
-}
-
-process BWA_ALIGN_PAIRED {
-    cpus "${params.cpus}"
-    memory "${params.memory}"
-    tag "${name}"
-
-    input:
-        tuple val(name), file(fastq1), file(fastq2)
-
-    output:
-        tuple val("${name}"), file("${fastq1}"), file("${fastq1.baseName}.sai"), emit: alignment_output
-
-    """
-    bwa aln -t ${task.cpus} ${params.reference} ${fastq1} > ${fastq1.baseName}.sai
     """
 }
 
