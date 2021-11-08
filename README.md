@@ -8,7 +8,6 @@
 Nextflow pipeline for the alignment of paired and single end FASTQ files with BWA aln and mem algorithms.
 
 ## Requirements
-
 There are two packages that are required for this pipeline. Both of this are preconfigured when using the conda or docker profiles.
 
 - BWA 0.7.17
