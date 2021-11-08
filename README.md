@@ -7,31 +7,34 @@
 [![Powered by Nextflow](https://img.shields.io/badge/powered%20by-Nextflow-orange.svg?style=flat&colorA=E1523D&colorB=007D8A)](https://www.nextflow.io/)
 
 Nextflow pipeline for the alignment of paired and single end FASTQ files with BWA aln and mem algorithms.
+It includes an initial step of read trimming using FASTP.
 
 ## Requirements
-There are two packages that are required for this pipeline. Both of this are preconfigured when using the conda or docker profiles.
 
-- BWA 0.7.17
-- samtools 1.12
+There are three packages that are required for this pipeline. Both of this are preconfigured when using the conda profile.
+
+- BWA
+- samtools
+- FASTP
 
 
 ## How to run it
 
 Run it from GitHub as follows:
 ```
-nextflow run tron-bioinformatics/tronflow-bwa --input_files $input --output $output --algorithm aln --library paired -profile conda,standard
+nextflow run tron-bioinformatics/tronflow-bwa -r v1.5.0 -profile conda --input_files $input --output $output --algorithm aln --library paired
 ```
 
 Otherwise download the project and run as follows:
 ```
-nextflow main.nf --input_files $input --output $output --algorithm aln --library paired -profile conda,standard
+nextflow main.nf -profile conda --input_files $input --output $output --algorithm aln --library paired
 ```
 
 Find the help as follows:
 ```
 $ nextflow run tron-bioinformatics/tronflow-bwa  --help
 N E X T F L O W  ~  version 19.07.0
-Launching `bam_preprocessing.nf` [intergalactic_shannon] - revision: e707c77d7b
+Launching `main.nf` [intergalactic_shannon] - revision: e707c77d7b
 
 Usage:
     nextflow main.nf --input_files input_files [--reference reference.fasta]
@@ -53,12 +56,10 @@ Optional input:
     * cpus: determines the number of CPUs for each job, with the exception of bwa sampe and samse steps which are not parallelized (default: 8)
     * memory: determines the memory required by each job (default: 8g)
     * inception: if enabled it uses an inception, only valid for BWA aln, it requires a fast file system such as flash (default: false)
+    * skip_trimming: skips the read trimming step
 
 Output:
     * A BAM file \${name}.bam
-```
-
-You can run it with a conda environment using the option `-profile` such as:
-```
-$ nextflow main.nf --input_files test_data/test_input.txt --reference `pwd`/test_data/ucsc.hg19.minimal.fasta -profile conda
+    * FASTP read trimming stats report in HTML format \${name.fastp_stats.html}
+    * FASTP read trimming stats report in JSON format \${name.fastp_stats.json}
 ```
