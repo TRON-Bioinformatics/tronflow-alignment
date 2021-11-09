@@ -6,16 +6,13 @@
 [![License](https://img.shields.io/badge/license-MIT-green)](https://opensource.org/licenses/MIT)
 [![Powered by Nextflow](https://img.shields.io/badge/powered%20by-Nextflow-orange.svg?style=flat&colorA=E1523D&colorB=007D8A)](https://www.nextflow.io/)
 
-Nextflow pipeline for the alignment of paired and single end FASTQ files with BWA aln and mem algorithms.
-It includes an initial step of read trimming using FASTP.
+The TronFlow BWA pipeline is part of a collection of computational workflows for tumor-normal pair 
+somatic variant calling.
 
-## Requirements
+Find the documentation here [![Documentation Status](https://readthedocs.org/projects/tronflow-docs/badge/?version=latest)](https://tronflow-docs.readthedocs.io/en/latest/?badge=latest)
 
-There are three packages that are required for this pipeline. Both of this are preconfigured when using the conda profile.
-
-- BWA
-- samtools
-- FASTP
+This pipeline aligns paired and single end FASTQ files with BWA aln and mem algorithms.
+It also includes an initial step of read trimming using FASTP.
 
 
 ## How to run it
@@ -63,3 +60,18 @@ Output:
     * FASTP read trimming stats report in HTML format \${name.fastp_stats.html}
     * FASTP read trimming stats report in JSON format \${name.fastp_stats.json}
 ```
+
+### Input tables
+
+The table with FASTQ files expects two tab-separated columns without a header
+
+| Sample name          | FASTQ 1                      | FASTQ 2                  |
+|----------------------|---------------------------------|------------------------------|
+| sample_1             | /path/to/sample_1.1.fastq      |    /path/to/sample_1.2.fastq   |
+| sample_2             | /path/to/sample_2.1.fastq      |    /path/to/sample_2.2.fastq   |
+
+
+## References
+
+* Li H. and Durbin R. (2010) Fast and accurate long-read alignment with Burrows-Wheeler Transform. Bioinformatics, Epub. https://doi.org/10.1093/bioinformatics/btp698 
+* Shifu Chen, Yanqing Zhou, Yaru Chen, Jia Gu; fastp: an ultra-fast all-in-one FASTQ preprocessor, Bioinformatics, Volume 34, Issue 17, 1 September 2018, Pages i884–i890, https://doi.org/10.1093/bioinformatics/bty560
