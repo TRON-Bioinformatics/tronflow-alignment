@@ -35,10 +35,12 @@ process BWA_SAMPE {
       tuple val(name), file(fastq1), file(sai1), file(fastq2), file(sai2)
 
     output:
-      tuple val("${name}"), file("${name}.bam"), emit: sampe_output
+      tuple val("${name}"), file("${name}.bam"), file("${name}.bam.bai"), emit: sampe_output
 
     """
     bwa sampe ${params.reference} ${sai1} ${sai2} ${fastq1} ${fastq2} | samtools view -uS - | samtools sort - > ${name}.bam
+
+    samtools index ${name}.bam
     """
 }
 
@@ -55,10 +57,12 @@ process BWA_SAMSE {
       tuple val(name), file(fastq), file(sai)
 
     output:
-      tuple val("${name}"), file("${name}.bam"), emit: samse_output
+      tuple val("${name}"), file("${name}.bam"), file("${name}.bam.bai"), emit: samse_output
 
     """
     bwa samse ${params.reference} ${sai} ${fastq} | samtools view -uS - | samtools sort - > ${name}.bam
+
+    samtools index ${name}.bam
     """
 }
 
@@ -75,11 +79,13 @@ process BWA_ALN_INCEPTION {
       tuple val(name), file(fastq1), file(fastq2)
 
     output:
-      tuple val("${name}"), file("${name}.bam"), emit: sampe_output
+      tuple val("${name}"), file("${name}.bam"), file("${name}.bam.bai"), emit: sampe_output
 
     """
     bwa sampe ${params.reference} <( bwa aln -t ${params.cpus} ${params.reference} ${fastq1} ) \
     <( bwa aln -t ${params.cpus} ${params.reference} ${fastq2} ) ${fastq1} ${fastq2} \
     | samtools view -uS - | samtools sort - > ${name}.bam
+
+    samtools index ${name}.bam
     """
 }
