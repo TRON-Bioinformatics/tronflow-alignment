@@ -43,11 +43,11 @@ Input:
     Example input file:
     name1	fastq1.1	fastq1.2
     name2	fastq2.1	fastq2.2
+    * reference: path to the indexed FASTA genome reference
 
 Optional input:
     * input_fastq2: the path to a second FASTQ file (incompatible with --input_files, incompatible with --library paired)
-    * reference: path to the indexed FASTA genome reference (default: human genome 19)
-    * output: the folder where to publish output
+    * output: the folder where to publish output (default: output)
     * algorithm: determines the BWA algorithm, either `aln` or `mem` (default `aln`)
     * library: determines whether the sequencing library is paired or single end, either `paired` or `single` (default `paired`)
     * cpus: determines the number of CPUs for each job, with the exception of bwa sampe and samse steps which are not parallelized (default: 8)
@@ -70,6 +70,12 @@ The table with FASTQ files expects two tab-separated columns without a header
 | sample_1             | /path/to/sample_1.1.fastq      |    /path/to/sample_1.2.fastq   |
 | sample_2             | /path/to/sample_2.1.fastq      |    /path/to/sample_2.2.fastq   |
 
+
+### Reference genome
+
+The reference genome has to be provided in FASTA format and it requires two set of indexes:
+* FAI index. Create with `samtools faidx your.fasta`
+* BWA indexes. Create with `bwa index your.fasta`
 
 ## References
 
