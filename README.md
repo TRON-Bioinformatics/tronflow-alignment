@@ -47,7 +47,7 @@ Input:
 
 Optional input:
     * input_fastq2: the path to a second FASTQ file (incompatible with --input_files, incompatible with --library paired)
-    * output: the folder where to publish output
+    * output: the folder where to publish output (default: output)
     * algorithm: determines the BWA algorithm, either `aln` or `mem` (default `aln`)
     * library: determines whether the sequencing library is paired or single end, either `paired` or `single` (default `paired`)
     * cpus: determines the number of CPUs for each job, with the exception of bwa sampe and samse steps which are not parallelized (default: 8)
