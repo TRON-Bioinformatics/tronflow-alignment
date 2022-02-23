@@ -17,10 +17,12 @@ process BWA_MEM {
       tuple val(name), file(fastq1), file(fastq2)
 
     output:
-      tuple val("${name}"), file("${name}.bam"), emit: sampe_output
+      tuple val("${name}"), file("${name}.bam"), file("${name}.bam.bai"), emit: sampe_output
 
     """
     bwa mem -t ${task.cpus} ${params.reference} ${fastq1} ${fastq2} | samtools view -uS - | samtools sort - > ${name}.bam
+
+    samtools index ${name}.bam
     """
 }
 
@@ -37,9 +39,11 @@ process BWA_MEM_SE {
       tuple val(name), file(fastq)
 
     output:
-      tuple val("${name}"), file("${name}.bam"), emit: sampe_output
+      tuple val("${name}"), file("${name}.bam"), file("${name}.bam.bai"), emit: sampe_output
 
     """
     bwa mem -t ${task.cpus} ${params.reference} ${fastq} | samtools view -uS - | samtools sort - > ${name}.bam
+
+    samtools index ${name}.bam
     """
 }
