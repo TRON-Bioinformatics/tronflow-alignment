@@ -5,6 +5,7 @@ nextflow.enable.dsl = 2
 include { FASTP_PAIRED; FASTP_SINGLE } from './modules/fastp'
 include { BWA_ALN; BWA_ALN as BWA_ALN_2; BWA_SAMPE; BWA_SAMSE; BWA_ALN_INCEPTION } from './modules/bwa_aln'
 include { BWA_MEM; BWA_MEM_SE } from './modules/bwa_mem'
+include { BWA_MEM_2; BWA_MEM_2_SE } from './modules/bwa_mem_2'
 
 params.help= false
 params.input_files = false
@@ -30,7 +31,7 @@ if (params.help) {
 if (!params.reference) {
   exit 1, "Reference genome not specified! Please, provide --reference"
 }
-if (params.algorithm != "aln" && params.algorithm != "mem") {
+if (params.algorithm != "aln" && params.algorithm != "mem" && params.algorithm != "mem2") {
     exit 1, "Unsupported BWA algorithm ${params.algorithm}!"
 }
 if (params.library != "paired" && params.library != "single") {
@@ -96,6 +97,9 @@ workflow {
         else if (params.algorithm == "mem") {
             BWA_MEM(trimmed_fastqs)
         }
+        else if (params.algorithm == "mem2") {
+            BWA_MEM_2(trimmed_fastqs)
+        }
         else {
           exit 1, "Unsupported configuration!"
         }
@@ -113,6 +117,9 @@ workflow {
         }
         else if (params.algorithm == "mem") {
             BWA_MEM_SE(trimmed_fastqs)
+        }
+        else if (params.algorithm == "mem2") {
+            BWA_MEM_2_SE(trimmed_fastqs)
         }
         else {
           exit 1, "Unsupported configuration!"

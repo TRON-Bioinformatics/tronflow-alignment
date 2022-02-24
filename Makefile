@@ -16,3 +16,5 @@ test:
 	bash tests/run_test_6.sh
 	bash tests/run_test_7.sh
 	bash tests/run_test_8.sh
+	bash tests/run_test_9.sh
+	bash tests/run_test_10.sh
