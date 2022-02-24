@@ -11,7 +11,7 @@ somatic variant calling.
 
 Find the documentation here [![Documentation Status](https://readthedocs.org/projects/tronflow-docs/badge/?version=latest)](https://tronflow-docs.readthedocs.io/en/latest/?badge=latest)
 
-This pipeline aligns paired and single end FASTQ files with BWA aln and mem algorithms.
+This pipeline aligns paired and single end FASTQ files with BWA aln and mem algorithms and with BWA mem 2.
 It also includes an initial step of read trimming using FASTP.
 
 
@@ -48,7 +48,7 @@ Input:
 Optional input:
     * input_fastq2: the path to a second FASTQ file (incompatible with --input_files, incompatible with --library paired)
     * output: the folder where to publish output (default: output)
-    * algorithm: determines the BWA algorithm, either `aln` or `mem` (default `aln`)
+    * algorithm: determines the BWA algorithm, either `aln`, `mem` and `mem2` (default `aln`)
     * library: determines whether the sequencing library is paired or single end, either `paired` or `single` (default `paired`)
     * cpus: determines the number of CPUs for each job, with the exception of bwa sampe and samse steps which are not parallelized (default: 8)
     * memory: determines the memory required by each job (default: 8g)
@@ -81,3 +81,4 @@ The reference genome has to be provided in FASTA format and it requires two set 
 
 * Li H. and Durbin R. (2010) Fast and accurate long-read alignment with Burrows-Wheeler Transform. Bioinformatics, Epub. https://doi.org/10.1093/bioinformatics/btp698 
 * Shifu Chen, Yanqing Zhou, Yaru Chen, Jia Gu; fastp: an ultra-fast all-in-one FASTQ preprocessor, Bioinformatics, Volume 34, Issue 17, 1 September 2018, Pages i884–i890, https://doi.org/10.1093/bioinformatics/bty560
+* Vasimuddin Md, Sanchit Misra, Heng Li, Srinivas Aluru. Efficient Architecture-Aware Acceleration of BWA-MEM for Multicore Systems. IEEE Parallel and Distributed Processing Symposium (IPDPS), 2019.
