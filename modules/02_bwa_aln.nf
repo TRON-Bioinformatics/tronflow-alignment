@@ -26,7 +26,7 @@ process BWA_SAMPE {
     cpus 1
     memory params.memory
     tag "${name}"
-    publishDir params.output, mode: "move"
+    publishDir params.output, mode: "copy"
 
     conda (params.enable_conda ? "bioconda::bwa=0.7.17 bioconda::samtools=1.12" : null)
 
@@ -35,12 +35,10 @@ process BWA_SAMPE {
       tuple val(name), file(fastq1), file(sai1), file(fastq2), file(sai2)
 
     output:
-      tuple val("${name}"), file("${name}.bam"), file("${name}.bam.bai"), emit: sampe_output
+      tuple val("${name}"), file("${name}.bam"), emit: bams
 
     """
     bwa sampe ${params.reference} ${sai1} ${sai2} ${fastq1} ${fastq2} | samtools view -uS - | samtools sort - > ${name}.bam
-
-    samtools index ${name}.bam
     """
 }
 
@@ -48,21 +46,19 @@ process BWA_SAMSE {
     cpus 1
     memory "${params.memory}"
     tag "${name}"
-    publishDir params.output, mode: "move"
+    publishDir params.output, mode: "copy"
 
-    conda (params.enable_conda ? "bioconda::bwa=0.7.17 bioconda::samtools=1.12" : null)
+    conda (params.enable_conda ? "bioconda::bwa=0.7.17" : null)
 
     input:
       // joins both channels by key using the first element in the tuple, the name
       tuple val(name), file(fastq), file(sai)
 
     output:
-      tuple val("${name}"), file("${name}.bam"), file("${name}.bam.bai"), emit: samse_output
+      tuple val("${name}"), file("${name}.bam"), emit: bams
 
     """
     bwa samse ${params.reference} ${sai} ${fastq} | samtools view -uS - | samtools sort - > ${name}.bam
-
-    samtools index ${name}.bam
     """
 }
 
@@ -70,22 +66,20 @@ process BWA_ALN_INCEPTION {
     cpus "${params.cpus}".toInteger() * 2
     memory "${params.memory}"
     tag "${name}"
-    publishDir params.output, mode: "move"
+    publishDir params.output, mode: "copy"
 
-    conda (params.enable_conda ? "bioconda::bwa=0.7.17 bioconda::samtools=1.12" : null)
+    conda (params.enable_conda ? "bioconda::bwa=0.7.17" : null)
 
     input:
       // joins both channels by key using the first element in the tuple, the name
       tuple val(name), file(fastq1), file(fastq2)
 
     output:
-      tuple val("${name}"), file("${name}.bam"), file("${name}.bam.bai"), emit: sampe_output
+      tuple val("${name}"), file("${name}.bam"), emit: bams
 
     """
     bwa sampe ${params.reference} <( bwa aln -t ${params.cpus} ${params.reference} ${fastq1} ) \
     <( bwa aln -t ${params.cpus} ${params.reference} ${fastq2} ) ${fastq1} ${fastq2} \
     | samtools view -uS - | samtools sort - > ${name}.bam
-
-    samtools index ${name}.bam
     """
 }

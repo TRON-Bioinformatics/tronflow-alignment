@@ -2,10 +2,12 @@
 
 nextflow.enable.dsl = 2
 
-include { FASTP_PAIRED; FASTP_SINGLE } from './modules/fastp'
-include { BWA_ALN; BWA_ALN as BWA_ALN_2; BWA_SAMPE; BWA_SAMSE; BWA_ALN_INCEPTION } from './modules/bwa_aln'
-include { BWA_MEM; BWA_MEM_SE } from './modules/bwa_mem'
-include { BWA_MEM_2; BWA_MEM_2_SE } from './modules/bwa_mem_2'
+include { FASTP_PAIRED; FASTP_SINGLE } from './modules/01_fastp'
+include { BWA_ALN; BWA_ALN as BWA_ALN_2; BWA_SAMPE; BWA_SAMSE; BWA_ALN_INCEPTION } from './modules/02_bwa_aln'
+include { BWA_MEM; BWA_MEM_SE } from './modules/02_bwa_mem'
+include { BWA_MEM_2; BWA_MEM_2_SE } from './modules/02_bwa_mem_2'
+include { STAR } from './modules/02_star'
+include { INDEX_BAM } from './modules/03_index'
 
 params.help= false
 params.input_files = false
@@ -31,8 +33,8 @@ if (params.help) {
 if (!params.reference) {
   exit 1, "Reference genome not specified! Please, provide --reference"
 }
-if (params.algorithm != "aln" && params.algorithm != "mem" && params.algorithm != "mem2") {
-    exit 1, "Unsupported BWA algorithm ${params.algorithm}!"
+if (params.algorithm != "aln" && params.algorithm != "mem" && params.algorithm != "mem2" && params.algorithm != "star") {
+    exit 1, "Unsupported alignment algorithm ${params.algorithm}!"
 }
 if (params.library != "paired" && params.library != "single") {
     exit 1, "Unsupported library preparation ${params.library}!"
@@ -79,6 +81,8 @@ else if (params.input_files) {
 
 workflow {
     if (params.library == "paired") {
+
+        // adaptor trimming
         if (params.skip_trimming) {
             trimmed_fastqs = input_files
         }
@@ -86,19 +90,29 @@ workflow {
             FASTP_PAIRED(input_files)
             trimmed_fastqs = FASTP_PAIRED.out.trimmed_fastqs
         }
+
+        // alignment
         if (params.algorithm == "aln" && !params.inception) {
             BWA_ALN(trimmed_fastqs.map {name, fq1, fq2 -> tuple(name, fq1)})
             BWA_ALN_2(trimmed_fastqs.map {name, fq1, fq2 -> tuple(name, fq2)})
             BWA_SAMPE(BWA_ALN.out.alignment_output.join(BWA_ALN_2.out.alignment_output))
+            output_bams = BWA_SAMPE.out.bams
         }
         else if (params.algorithm == "aln" && params.inception) {
             BWA_ALN_INCEPTION(trimmed_fastqs)
+            output_bams = BWA_ALN_INCEPTION.out.bams
         }
         else if (params.algorithm == "mem") {
             BWA_MEM(trimmed_fastqs)
+            output_bams = BWA_MEM.out.bams
         }
         else if (params.algorithm == "mem2") {
             BWA_MEM_2(trimmed_fastqs)
+            output_bams = BWA_MEM_2.out.bams
+        }
+        else if (params.algorithm == "star") {
+            STAR(trimmed_fastqs)
+            output_bams = STAR.out.bams
         }
         else {
           exit 1, "Unsupported configuration!"
@@ -114,12 +128,19 @@ workflow {
         }
         if (params.algorithm == "aln"  && !params.inception) {
             BWA_SAMSE(BWA_ALN(trimmed_fastqs))
+            output_bams = BWA_SAMSE.out.bams
         }
         else if (params.algorithm == "mem") {
             BWA_MEM_SE(trimmed_fastqs)
+            output_bams = BWA_MEM_SE.out.bams
         }
         else if (params.algorithm == "mem2") {
             BWA_MEM_2_SE(trimmed_fastqs)
+            output_bams = BWA_MEM_2_SE.out.bams
+        }
+        else if (params.algorithm == "star") {
+            STAR_SE(trimmed_fastqs)
+            output_bams = STAR_SE.out.bams
         }
         else {
           exit 1, "Unsupported configuration!"
@@ -128,4 +149,5 @@ workflow {
     else {
       exit 1, "Unsupported configuration!"
     }
+    INDEX_BAM(output_bams)
 }
