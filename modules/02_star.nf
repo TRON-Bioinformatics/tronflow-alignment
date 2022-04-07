@@ -8,7 +8,7 @@ process STAR {
     cpus 1
     memory params.memory
     tag "${name}"
-    publishDir params.output, mode: "copy"
+    publishDir params.output, mode: "copy", pattern:"${name}.bam"
     publishDir "${params.output}/${name}/", mode: "copy", pattern: "software_versions.*"
 
     conda (params.enable_conda ? "bioconda::star=2.7.10a" : null)
@@ -41,7 +41,7 @@ process STAR_SE {
     cpus 1
     memory "${params.memory}"
     tag "${name}"
-    publishDir params.output, mode: "copy"
+    publishDir params.output, mode: "copy", pattern:"${name}.bam"
     publishDir "${params.output}/${name}/", mode: "copy", pattern: "software_versions.*"
 
     conda (params.enable_conda ? "bioconda::star=2.7.10a" : null)

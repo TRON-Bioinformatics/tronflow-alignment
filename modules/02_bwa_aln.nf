@@ -31,7 +31,7 @@ process BWA_SAMPE {
     cpus 1
     memory params.memory
     tag "${name}"
-    publishDir params.output, mode: "copy"
+    publishDir params.output, mode: "copy", pattern:"${name}.bam"
     publishDir "${params.output}/${name}/", mode: "copy", pattern: "software_versions.*"
 
     conda (params.enable_conda ? "bioconda::bwa=0.7.17 bioconda::samtools=1.12" : null)
@@ -57,7 +57,7 @@ process BWA_SAMSE {
     cpus 1
     memory "${params.memory}"
     tag "${name}"
-    publishDir params.output, mode: "copy"
+    publishDir params.output, mode: "copy", pattern:"${name}.bam"
     publishDir "${params.output}/${name}/", mode: "copy", pattern: "software_versions.*"
 
     conda (params.enable_conda ? "bioconda::bwa=0.7.17" : null)
@@ -82,7 +82,7 @@ process BWA_ALN_INCEPTION {
     cpus "${params.cpus}".toInteger() * 2
     memory "${params.memory}"
     tag "${name}"
-    publishDir params.output, mode: "copy"
+    publishDir params.output, mode: "copy", pattern:"${name}.bam"
     publishDir "${params.output}/${name}/", mode: "copy", pattern: "software_versions.*"
 
     conda (params.enable_conda ? "bioconda::bwa=0.7.17" : null)

@@ -7,7 +7,7 @@ process INDEX_BAM {
     cpus 1
     memory params.memory
     tag "${name}"
-    publishDir params.output, mode: "move"
+    publishDir params.output, mode: "move", pattern:"${name}.bam.bai"
     publishDir "${params.output}/${name}/", mode: "copy", pattern: "software_versions.*"
 
     conda (params.enable_conda ? "bioconda::samtools=1.12" : null)

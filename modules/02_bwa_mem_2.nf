@@ -8,7 +8,7 @@ process BWA_MEM_2 {
     cpus "${params.cpus}"
     memory "${params.memory}"
     tag "${name}"
-    publishDir params.output, mode: "copy"
+    publishDir params.output, mode: "copy", pattern:"${name}.bam"
     publishDir "${params.output}/${name}/", mode: "copy", pattern: "software_versions.*"
 
     conda (params.enable_conda ? "bioconda::bwa-mem2=2.2.1 bioconda::samtools=1.12" : null)
@@ -33,7 +33,7 @@ process BWA_MEM_2_SE {
     cpus "${params.cpus}"
     memory "${params.memory}"
     tag "${name}"
-    publishDir params.output, mode: "copy"
+    publishDir params.output, mode: "copy", pattern:"${name}.bam"
     publishDir "${params.output}/${name}/", mode: "copy", pattern: "software_versions.*"
 
     conda (params.enable_conda ? "bioconda::bwa-mem2=2.2.1 bioconda::samtools=1.12" : null)

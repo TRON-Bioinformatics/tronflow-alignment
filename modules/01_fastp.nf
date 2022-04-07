@@ -35,7 +35,7 @@ process FASTP_PAIRED {
     --html ${name}.fastp_stats.html
 
     echo ${params.manifest} >> software_versions.${task.process}.txt
-    fastp --version >> software_versions.${task.process}.txt
+    fastp --version 2>> software_versions.${task.process}.txt
     """
 }
 
@@ -66,6 +66,6 @@ process FASTP_SINGLE {
     --html ${name}.fastp_stats.html
 
     echo ${params.manifest} >> software_versions.${task.process}.txt
-    fastp --version >> software_versions.${task.process}.txt
+    fastp --version 2>> software_versions.${task.process}.txt
     """
 }
