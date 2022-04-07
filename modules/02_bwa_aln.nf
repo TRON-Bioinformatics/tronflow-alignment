@@ -60,7 +60,7 @@ process BWA_SAMSE {
     publishDir params.output, mode: "copy", pattern:"${name}.bam"
     publishDir "${params.output}/${name}/", mode: "copy", pattern: "software_versions.*"
 
-    conda (params.enable_conda ? "bioconda::bwa=0.7.17" : null)
+    conda (params.enable_conda ? "bioconda::bwa=0.7.17 bioconda::samtools=1.12" : null)
 
     input:
       // joins both channels by key using the first element in the tuple, the name
@@ -85,7 +85,7 @@ process BWA_ALN_INCEPTION {
     publishDir params.output, mode: "copy", pattern:"${name}.bam"
     publishDir "${params.output}/${name}/", mode: "copy", pattern: "software_versions.*"
 
-    conda (params.enable_conda ? "bioconda::bwa=0.7.17" : null)
+    conda (params.enable_conda ? "bioconda::bwa=0.7.17 bioconda::samtools=1.12" : null)
 
     input:
       // joins both channels by key using the first element in the tuple, the name
