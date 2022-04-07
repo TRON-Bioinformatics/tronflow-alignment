@@ -21,6 +21,7 @@ jobs:
       run: |
         cd test_data
         conda env create -f star_environment.yml
+        conda init bash
         conda activate star
         ./build_star_indexes.sh
         conda deactivate
