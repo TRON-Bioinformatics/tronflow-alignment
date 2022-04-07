@@ -20,11 +20,12 @@ jobs:
     - name: Build star indices
       run: |
         cd test_data
-        conda init bash
-        conda env create -f star_environment.yml
-        conda activate star
+        #conda init bash
+        #conda env create -f star_environment.yml
+        #conda activate star
+        conda install -y bioconda::star=2.7.10a
         ./build_star_indexes.sh
-        conda deactivate
+        #conda deactivate
         cd ..
     - name: Run tests
       run: |
