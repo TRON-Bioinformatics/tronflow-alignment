@@ -9,6 +9,7 @@ process STAR {
     memory params.memory
     tag "${name}"
     publishDir params.output, mode: "copy"
+    publishDir "${params.output}/${name}/", mode: "copy", pattern: "software_versions.*"
 
     conda (params.enable_conda ? "bioconda::star=2.7.10a" : null)
 
@@ -17,6 +18,7 @@ process STAR {
 
     output:
       tuple val("${name}"), file("${name}.bam"), emit: bams
+      file("software_versions.${task.process}.txt")
 
     """
     STAR --genomeDir ${params.reference} \
@@ -40,6 +42,7 @@ process STAR_SE {
     memory "${params.memory}"
     tag "${name}"
     publishDir params.output, mode: "copy"
+    publishDir "${params.output}/${name}/", mode: "copy", pattern: "software_versions.*"
 
     conda (params.enable_conda ? "bioconda::star=2.7.10a" : null)
 
@@ -48,6 +51,7 @@ process STAR_SE {
 
     output:
       tuple val("${name}"), file("${name}.bam"), emit: bams
+      file("software_versions.${task.process}.txt")
 
     """
     STAR --genomeDir ${params.reference} \
@@ -63,5 +67,8 @@ process STAR_SE {
     --outFileNamePrefix ${name}.
 
     mv ${name}.Aligned.sortedByCoord.out.bam ${name}.bam
+
+    echo ${params.manifest} >> software_versions.${task.process}.txt
+    STAR --version >> software_versions.${task.process}.txt
     """
 }

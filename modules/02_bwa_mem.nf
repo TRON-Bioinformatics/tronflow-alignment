@@ -9,6 +9,7 @@ process BWA_MEM {
     memory "${params.memory}"
     tag "${name}"
     publishDir params.output, mode: "move"
+    publishDir "${params.output}/${name}/", mode: "copy", pattern: "software_versions.*"
 
     conda (params.enable_conda ? "bioconda::bwa=0.7.17 bioconda::samtools=1.12" : null)
 
@@ -17,9 +18,14 @@ process BWA_MEM {
 
     output:
       tuple val("${name}"), file("${name}.bam"), emit: bams
+      file("software_versions.${task.process}.txt")
 
     """
     bwa mem -t ${task.cpus} ${params.reference} ${fastq1} ${fastq2} | samtools view -uS - | samtools sort - > ${name}.bam
+
+    echo ${params.manifest} >> software_versions.${task.process}.txt
+    bwa  >> software_versions.${task.process}.txt
+    samtools --version >> software_versions.${task.process}.txt
     """
 }
 
@@ -28,6 +34,7 @@ process BWA_MEM_SE {
     memory "${params.memory}"
     tag "${name}"
     publishDir params.output, mode: "move"
+    publishDir "${params.output}/${name}/", mode: "copy", pattern: "software_versions.*"
 
     conda (params.enable_conda ? "bioconda::bwa=0.7.17 bioconda::samtools=1.12" : null)
 
@@ -37,8 +44,13 @@ process BWA_MEM_SE {
 
     output:
       tuple val("${name}"), file("${name}.bam"), emit: bams
+      file("software_versions.${task.process}.txt")
 
     """
     bwa mem -t ${task.cpus} ${params.reference} ${fastq} | samtools view -uS - | samtools sort - > ${name}.bam
+
+    echo ${params.manifest} >> software_versions.${task.process}.txt
+    bwa  >> software_versions.${task.process}.txt
+    samtools --version >> software_versions.${task.process}.txt
     """
 }
