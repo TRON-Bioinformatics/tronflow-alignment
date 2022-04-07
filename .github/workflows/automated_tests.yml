@@ -19,14 +19,15 @@ jobs:
         wget -qO- https://get.nextflow.io | bash && cp nextflow /usr/local/bin/nextflow
     - name: Build star indices
       run: |
-        cd test_data
+        #cd test_data
         #conda init bash
         #conda env create -f star_environment.yml
         #conda activate star
         conda install -y bioconda::star=2.7.10a
-        ./build_star_indexes.sh
+        STAR --runMode genomeGenerate --genomeDir test_data --genomeFastaFiles test_data/ucsc.hg19.minimal.fasta --sjdbGTFfile test_data/gencode.v37.minimal.gtf
+        #./build_star_indexes.sh
         #conda deactivate
-        cd ..
+        #cd ..
     - name: Run tests
       run: |
         make
