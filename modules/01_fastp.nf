@@ -33,6 +33,9 @@ process FASTP_PAIRED {
     --out2 ${fastq2.baseName}.trimmed.fq.gz \
     --json ${name}.fastp_stats.json \
     --html ${name}.fastp_stats.html
+
+    echo ${params.manifest} >> software_versions.${task.process}.txt
+    fastp --version >> software_versions.${task.process}.txt
     """
 }
 
