@@ -23,7 +23,7 @@ process BWA_ALN {
     bwa aln -t ${task.cpus} ${params.reference} ${fastq} > ${fastq.baseName}.sai
 
     echo ${params.manifest} >> software_versions.${task.process}.txt
-    bwa  >> software_versions.${task.process}.txt
+    echo "bwa=0.7.17"  >> software_versions.${task.process}.txt
     """
 }
 
@@ -48,7 +48,7 @@ process BWA_SAMPE {
     bwa sampe ${params.reference} ${sai1} ${sai2} ${fastq1} ${fastq2} | samtools view -uS - | samtools sort - > ${name}.bam
 
     echo ${params.manifest} >> software_versions.${task.process}.txt
-    bwa  >> software_versions.${task.process}.txt
+    echo "bwa=0.7.17"  >> software_versions.${task.process}.txt
     samtools --version >> software_versions.${task.process}.txt
     """
 }
@@ -74,7 +74,7 @@ process BWA_SAMSE {
     bwa samse ${params.reference} ${sai} ${fastq} | samtools view -uS - | samtools sort - > ${name}.bam
 
     echo ${params.manifest} >> software_versions.${task.process}.txt
-    bwa  >> software_versions.${task.process}.txt
+    echo "bwa=0.7.17"  >> software_versions.${task.process}.txt
     """
 }
 
@@ -101,7 +101,7 @@ process BWA_ALN_INCEPTION {
     | samtools view -uS - | samtools sort - > ${name}.bam
 
     echo ${params.manifest} >> software_versions.${task.process}.txt
-    bwa  >> software_versions.${task.process}.txt
+    echo "bwa=0.7.17"  >> software_versions.${task.process}.txt
     samtools --version >> software_versions.${task.process}.txt
     """
 }

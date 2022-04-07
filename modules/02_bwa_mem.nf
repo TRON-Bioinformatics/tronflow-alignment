@@ -24,7 +24,7 @@ process BWA_MEM {
     bwa mem -t ${task.cpus} ${params.reference} ${fastq1} ${fastq2} | samtools view -uS - | samtools sort - > ${name}.bam
 
     echo ${params.manifest} >> software_versions.${task.process}.txt
-    bwa  >> software_versions.${task.process}.txt
+    echo "bwa=0.7.17"  >> software_versions.${task.process}.txt
     samtools --version >> software_versions.${task.process}.txt
     """
 }
@@ -50,7 +50,7 @@ process BWA_MEM_SE {
     bwa mem -t ${task.cpus} ${params.reference} ${fastq} | samtools view -uS - | samtools sort - > ${name}.bam
 
     echo ${params.manifest} >> software_versions.${task.process}.txt
-    bwa  >> software_versions.${task.process}.txt
+    echo "bwa=0.7.17"  >> software_versions.${task.process}.txt
     samtools --version >> software_versions.${task.process}.txt
     """
 }
