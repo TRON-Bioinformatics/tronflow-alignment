@@ -65,10 +65,10 @@ process BWA_SAMSE {
     input:
       // joins both channels by key using the first element in the tuple, the name
       tuple val(name), file(fastq), file(sai)
-      file("software_versions.${task.process}.txt")
 
     output:
       tuple val("${name}"), file("${name}.bam"), emit: bams
+      file("software_versions.${task.process}.txt")
 
     """
     bwa samse ${params.reference} ${sai} ${fastq} | samtools view -uS - | samtools sort - > ${name}.bam
