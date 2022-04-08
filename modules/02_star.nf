@@ -29,6 +29,9 @@ process STAR {
     --outFileNamePrefix ${name}.
 
     mv ${name}.Aligned.sortedByCoord.out.bam ${name}.bam
+
+    echo ${params.manifest} >> software_versions.${task.process}.txt
+    STAR --version >> software_versions.${task.process}.txt
     """
 }
 
