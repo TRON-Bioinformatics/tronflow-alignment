@@ -52,7 +52,7 @@ Optional input:
     * algorithm: determines the BWA algorithm, either `aln`, `mem`, `mem2` or `star` (default `aln`)
     * library: determines whether the sequencing library is paired or single end, either `paired` or `single` (default `paired`)
     * cpus: determines the number of CPUs for each job, with the exception of bwa sampe and samse steps which are not parallelized (default: 8)
-    * memory: determines the memory required by each job (default: 8g)
+    * memory: determines the memory required by each job (default: 32g)
     * inception: if enabled it uses an inception, only valid for BWA aln, it requires a fast file system such as flash (default: false)
     * skip_trimming: skips the read trimming step
 

@@ -9,21 +9,6 @@ include { BWA_MEM_2; BWA_MEM_2_SE } from './modules/02_bwa_mem_2'
 include { STAR; STAR_SE } from './modules/02_star'
 include { INDEX_BAM } from './modules/03_index'
 
-params.help= false
-params.input_files = false
-params.input_fastq1 = false
-params.input_fastq2 = false
-params.input_name = false
-params.reference = false
-params.output = 'output'
-params.algorithm = "aln"
-params.library = "paired"
-params.cpus = 8
-params.memory = "32g"
-params.inception = false
-params.skip_trimming = false
-
-
 if (params.help) {
     log.info params.help_message
     exit 0
