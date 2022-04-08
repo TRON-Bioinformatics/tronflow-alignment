@@ -1,9 +1,3 @@
-params.memory = "3g"
-params.cpus = 1
-params.output = "."
-params.enable_conda = false
-params.enable_docker = true
-
 
 process FASTP_PAIRED {
     cpus params.cpus
@@ -32,7 +26,8 @@ process FASTP_PAIRED {
     --out1 ${fastq1.baseName}.trimmed.fq.gz \
     --out2 ${fastq2.baseName}.trimmed.fq.gz \
     --json ${name}.fastp_stats.json \
-    --html ${name}.fastp_stats.html
+    --html ${name}.fastp_stats.html \
+    --thread ${params.cpus}
 
     echo ${params.manifest} >> software_versions.${task.process}.txt
     fastp --version 2>> software_versions.${task.process}.txt
@@ -63,7 +58,8 @@ process FASTP_SINGLE {
     --in1 ${fastq1} \
     --out1 ${fastq1.baseName}.trimmed.fq.gz \
     --json ${name}.fastp_stats.json \
-    --html ${name}.fastp_stats.html
+    --html ${name}.fastp_stats.html \
+    --thread ${params.cpus}
 
     echo ${params.manifest} >> software_versions.${task.process}.txt
     fastp --version 2>> software_versions.${task.process}.txt

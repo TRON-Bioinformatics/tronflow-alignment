@@ -1,8 +1,3 @@
-params.cpus = 8
-params.memory = "8g"
-params.reference = false
-params.enable_conda = false
-
 
 process BWA_ALN {
     cpus "${params.cpus}"
@@ -79,6 +74,7 @@ process BWA_SAMSE {
 }
 
 process BWA_ALN_INCEPTION {
+    // reserves double the CPUs for the inception
     cpus "${params.cpus}".toInteger() * 2
     memory "${params.memory}"
     tag "${name}"

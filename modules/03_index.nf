@@ -1,10 +1,6 @@
-params.cpus = 8
-params.memory = "8g"
-params.enable_conda = false
-
 
 process INDEX_BAM {
-    cpus 1
+    cpus params.cpus
     memory params.memory
     tag "${name}"
     publishDir params.output, mode: "move", pattern:"${name}.bam.bai"
@@ -20,7 +16,7 @@ process INDEX_BAM {
       file("software_versions.${task.process}.txt")
 
     """
-    samtools index ${bam}
+    samtools index -@ ${task.cpus} ${bam}
 
     echo ${params.manifest} >> software_versions.${task.process}.txt
     samtools --version >> software_versions.${task.process}.txt

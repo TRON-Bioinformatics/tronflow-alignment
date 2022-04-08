@@ -1,8 +1,3 @@
-params.cpus = 8
-params.memory = "32g"
-params.reference = false
-params.enable_conda = false
-
 
 process BWA_MEM_2 {
     cpus "${params.cpus}"

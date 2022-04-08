@@ -1,11 +1,6 @@
-params.cpus = 8
-params.memory = "8g"
-params.reference = false
-params.enable_conda = false
-
 
 process STAR {
-    cpus 1
+    cpus params.cpus
     memory params.memory
     tag "${name}"
     publishDir params.output, mode: "copy", pattern:"${name}.bam"
@@ -29,7 +24,7 @@ process STAR {
     --outSAMunmapped None \
     --outReadsUnmapped Fastx \
     --outFilterMismatchNoverLmax 0.02 \
-    --runThreadN ${params.cpus} \
+    --runThreadN ${task.cpus} \
     --outSAMtype BAM SortedByCoordinate \
     --outFileNamePrefix ${name}.
 
@@ -38,7 +33,7 @@ process STAR {
 }
 
 process STAR_SE {
-    cpus 1
+    cpus params.cpus
     memory "${params.memory}"
     tag "${name}"
     publishDir params.output, mode: "copy", pattern:"${name}.bam"
@@ -62,7 +57,7 @@ process STAR_SE {
     --outSAMunmapped None \
     --outReadsUnmapped Fastx \
     --outFilterMismatchNoverLmax 0.02 \
-    --runThreadN ${params.cpus} \
+    --runThreadN ${task.cpus} \
     --outSAMtype BAM SortedByCoordinate \
     --outFileNamePrefix ${name}.
 

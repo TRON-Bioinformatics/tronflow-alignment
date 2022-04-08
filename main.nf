@@ -19,7 +19,7 @@ params.output = 'output'
 params.algorithm = "aln"
 params.library = "paired"
 params.cpus = 8
-params.memory = "8g"
+params.memory = "32g"
 params.inception = false
 params.skip_trimming = false
 
