@@ -1,15 +1,10 @@
-params.memory = "3g"
-params.cpus = 1
-params.output = "."
-params.enable_conda = false
-params.enable_docker = true
-
 
 process FASTP_PAIRED {
     cpus params.cpus
     memory params.memory
-    publishDir "${params.output}", mode: "copy", pattern: "*fastp_stats*"
     tag "${name}"
+    publishDir "${params.output}", mode: "copy", pattern: "*fastp_stats*"
+    publishDir "${params.output}/${name}/", mode: "copy", pattern: "software_versions.*"
 
     conda (params.enable_conda ? "bioconda::fastp=0.20.1" : null)
 
@@ -21,6 +16,7 @@ process FASTP_PAIRED {
             file("${fastq2.baseName}.trimmed.fq.gz"), emit: trimmed_fastqs
         file("${name}.fastp_stats.json")
         file("${name}.fastp_stats.html")
+        file("software_versions.${task.process}.txt")
 
     """
     # --input_files needs to be forced, otherwise it is inherited from profile in tests
@@ -30,15 +26,20 @@ process FASTP_PAIRED {
     --out1 ${fastq1.baseName}.trimmed.fq.gz \
     --out2 ${fastq2.baseName}.trimmed.fq.gz \
     --json ${name}.fastp_stats.json \
-    --html ${name}.fastp_stats.html
+    --html ${name}.fastp_stats.html \
+    --thread ${params.cpus}
+
+    echo ${params.manifest} >> software_versions.${task.process}.txt
+    fastp --version 2>> software_versions.${task.process}.txt
     """
 }
 
 process FASTP_SINGLE {
     cpus params.cpus
     memory params.memory
-    publishDir "${params.output}", mode: "copy", pattern: "*fastp_stats*"
     tag "${name}"
+    publishDir "${params.output}", mode: "copy", pattern: "*fastp_stats*"
+    publishDir "${params.output}/${name}/", mode: "copy", pattern: "software_versions.*"
 
     conda (params.enable_conda ? "bioconda::fastp=0.20.1" : null)
 
@@ -49,6 +50,7 @@ process FASTP_SINGLE {
         tuple val(name), file("${fastq1.baseName}.trimmed.fq.gz"), emit: trimmed_fastqs
         file("${name}.fastp_stats.json")
         file("${name}.fastp_stats.html")
+        file("software_versions.${task.process}.txt")
 
     """
     # --input_files needs to be forced, otherwise it is inherited from profile in tests
@@ -56,6 +58,10 @@ process FASTP_SINGLE {
     --in1 ${fastq1} \
     --out1 ${fastq1.baseName}.trimmed.fq.gz \
     --json ${name}.fastp_stats.json \
-    --html ${name}.fastp_stats.html
+    --html ${name}.fastp_stats.html \
+    --thread ${params.cpus}
+
+    echo ${params.manifest} >> software_versions.${task.process}.txt
+    fastp --version 2>> software_versions.${task.process}.txt
     """
 }

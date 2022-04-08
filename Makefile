@@ -18,3 +18,6 @@ test:
 	bash tests/run_test_8.sh
 	bash tests/run_test_9.sh
 	bash tests/run_test_10.sh
+	# STAR indices take over 1 GB and we did not manage to make it work in GitHub actions
+	#bash tests/run_test_11.sh
+	#bash tests/run_test_12.sh
