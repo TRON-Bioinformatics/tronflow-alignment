@@ -127,7 +127,8 @@ workflow {
             trimmed_fastqs = FASTP_SINGLE.out.trimmed_fastqs
         }
         if (params.algorithm == "aln"  && !params.inception) {
-            BWA_SAMSE(BWA_ALN(trimmed_fastqs))
+            BWA_ALN(trimmed_fastqs)
+            BWA_SAMSE(BWA_ALN.out.alignment_output)
             output_bams = BWA_SAMSE.out.bams
         }
         else if (params.algorithm == "mem") {
