@@ -78,6 +78,11 @@ The reference genome has to be provided in FASTA format and it requires two set 
 * FAI index. Create with `samtools faidx your.fasta`
 * BWA indexes. Create with `bwa index your.fasta`
 
+For bwa-mem2 a specific index is needed:
+```
+bwa-mem2 index your.fasta
+```
+
 For star a reference folder prepared with star has to be provided. In order to prepare it will need the reference
 genome in FASTA format and the gene annotations in GTF format. Run a command as follows:
 ```
