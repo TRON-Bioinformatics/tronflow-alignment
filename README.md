@@ -20,7 +20,7 @@ It also includes an initial step of read trimming using FASTP.
 
 Run it from GitHub as follows:
 ```
-nextflow run tron-bioinformatics/tronflow-bwa -r v1.5.0 -profile conda --input_files $input --output $output --algorithm aln --library paired
+nextflow run tron-bioinformatics/tronflow-alignment -profile conda --input_files $input --output $output --algorithm aln --library paired
 ```
 
 Otherwise download the project and run as follows:
