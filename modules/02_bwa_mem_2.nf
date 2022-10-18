@@ -16,7 +16,7 @@ process BWA_MEM_2 {
       file("software_versions.${task.process}.txt")
 
     """
-    bwa-mem2 mem -t ${task.cpus} ${params.reference} ${fastq1} ${fastq2} | samtools view -uS - | samtools sort - > ${name}.bam
+    bwa-mem2 mem ${params.additional_args} -t ${task.cpus} ${params.reference} ${fastq1} ${fastq2} | samtools view -uS - | samtools sort - > ${name}.bam
 
     echo ${params.manifest} >> software_versions.${task.process}.txt
     bwa-mem2 version  >> software_versions.${task.process}.txt
@@ -42,7 +42,7 @@ process BWA_MEM_2_SE {
       file("software_versions.${task.process}.txt")
 
     """
-    bwa-mem2 mem -t ${task.cpus} ${params.reference} ${fastq} | samtools view -uS - | samtools sort - > ${name}.bam
+    bwa-mem2 mem ${params.additional_args} -t ${task.cpus} ${params.reference} ${fastq} | samtools view -uS - | samtools sort - > ${name}.bam
 
     echo ${params.manifest} >> software_versions.${task.process}.txt
     bwa-mem2 version  >> software_versions.${task.process}.txt
