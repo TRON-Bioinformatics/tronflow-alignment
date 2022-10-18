@@ -12,7 +12,7 @@ somatic variant calling.
 Find the documentation here [![Documentation Status](https://readthedocs.org/projects/tronflow-docs/badge/?version=latest)](https://tronflow-docs.readthedocs.io/en/latest/?badge=latest)
 
 This pipeline aligns paired and single end FASTQ files with BWA aln and mem algorithms and with BWA mem 2.
-For RNA-seq star is also supported.
+For RNA-seq STAR is also supported. To increase sensitivity of novel junctions use `--star_two_pass_mode` (recommended for RNAseq variant calling).
 It also includes an initial step of read trimming using FASTP.
 
 
@@ -55,6 +55,8 @@ Optional input:
     * memory: determines the memory required by each job (default: 32g)
     * inception: if enabled it uses an inception, only valid for BWA aln, it requires a fast file system such as flash (default: false)
     * skip_trimming: skips the read trimming step
+    * star_two_pass_mode: activates STAR two-pass mode, increasing sensitivity of novel junction discovery, recommended for RNA variant calling (default: false)
+    * additional_args: additional alignment arguments, only effective in BWA mem, BWA mem 2 and STAR (default: none) 
 
 Output:
     * A BAM file \${name}.bam and its index

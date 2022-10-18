@@ -21,3 +21,4 @@ test:
 	# STAR indices take over 1 GB and we did not manage to make it work in GitHub actions
 	#bash tests/run_test_11.sh
 	#bash tests/run_test_12.sh
+	#bash tests/run_test_13.sh
