@@ -19,4 +19,5 @@ jobs:
         wget -qO- https://get.nextflow.io | bash && cp nextflow /usr/local/bin/nextflow
     - name: Run tests
       run: |
+        export NXF_VER=20.04.0
         make
