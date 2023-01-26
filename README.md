@@ -39,6 +39,7 @@ Usage:
 
 Input:
     * input_fastq1: the path to a FASTQ file (incompatible with --input_files)
+    * input_name: name of the sample (only needed if input_fastq1 is used)
     * input_files: the path to a tab-separated values file containing in each row the sample name and two paired FASTQs (incompatible with --fastq1 and --fastq2)
     when `--library paired`, or a single FASTQ file when `--library single`
     Example input file:
