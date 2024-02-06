@@ -10,6 +10,7 @@ process STAR {
 
     input:
       tuple val(name), file(fastq1), file(fastq2)
+      val(reference)
 
     output:
       tuple val("${name}"), file("${name}.bam"), emit: bams
