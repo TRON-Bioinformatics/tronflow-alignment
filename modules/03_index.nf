@@ -13,12 +13,12 @@ process INDEX_BAM {
 
     output:
       file("${name}.bam.bai")
-      file("software_versions.${task.process}.txt")
+      file("software_versions.INDEX_BAM.txt")
 
     """
     samtools index -@ ${task.cpus} ${bam}
 
-    echo ${params.manifest} >> software_versions.${task.process}.txt
-    samtools --version >> software_versions.${task.process}.txt
+    echo ${params.manifest} >> software_versions.INDEX_BAM.txt
+    samtools --version >> software_versions.INDEX_BAM.txt
     """
 }
