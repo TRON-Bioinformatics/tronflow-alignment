@@ -113,7 +113,7 @@ workflow {
         }
         if (params.algorithm == "aln"  && !params.inception) {
             BWA_ALN(trimmed_fastqs,params.reference)
-            BWA_SAMSE(BWA_ALN.out.alignment_output)
+            BWA_SAMSE(BWA_ALN.out.alignment_output,params.reference)
             output_bams = BWA_SAMSE.out.bams
         }
         else if (params.algorithm == "mem") {
