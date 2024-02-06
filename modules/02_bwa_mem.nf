@@ -13,14 +13,14 @@ process BWA_MEM {
 
     output:
       tuple val("${name}"), file("${name}.bam"), emit: bams
-      file("software_versions.${task.process}.txt")
+      file("software_versions.BWA_MEM.txt")
 
     """
     bwa mem ${params.additional_args} -t ${task.cpus} ${params.reference} ${fastq1} ${fastq2} | samtools view -uS - | samtools sort - > ${name}.bam
 
-    echo ${params.manifest} >> software_versions.${task.process}.txt
-    echo "bwa=0.7.17"  >> software_versions.${task.process}.txt
-    samtools --version >> software_versions.${task.process}.txt
+    echo ${params.manifest} >> software_versions.BWA_MEM.txt
+    echo "bwa=0.7.17"  >> software_versions.BWA_MEM.txt
+    samtools --version >> software_versions.BWA_MEM.txt
     """
 }
 
@@ -39,13 +39,13 @@ process BWA_MEM_SE {
 
     output:
       tuple val("${name}"), file("${name}.bam"), emit: bams
-      file("software_versions.${task.process}.txt")
+      file("software_versions.BWA_MEM_SE.txt")
 
     """
     bwa mem ${params.additional_args} -t ${task.cpus} ${params.reference} ${fastq} | samtools view -uS - | samtools sort - > ${name}.bam
 
-    echo ${params.manifest} >> software_versions.${task.process}.txt
-    echo "bwa=0.7.17"  >> software_versions.${task.process}.txt
-    samtools --version >> software_versions.${task.process}.txt
+    echo ${params.manifest} >> software_versions.BWA_MEM_SE.txt
+    echo "bwa=0.7.17"  >> software_versions.BWA_MEM_SE.txt
+    samtools --version >> software_versions.BWA_MEM_SE.txt
     """
 }

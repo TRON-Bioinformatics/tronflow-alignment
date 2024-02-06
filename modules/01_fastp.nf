@@ -16,7 +16,7 @@ process FASTP_PAIRED {
             file("${fastq2.baseName}.trimmed.fq.gz"), emit: trimmed_fastqs
         file("${name}.fastp_stats.json")
         file("${name}.fastp_stats.html")
-        file("software_versions.${task.process}.txt")
+        file("software_versions.FASTP_PAIRED.txt")
 
     """
     # --input_files needs to be forced, otherwise it is inherited from profile in tests
@@ -29,8 +29,8 @@ process FASTP_PAIRED {
     --html ${name}.fastp_stats.html \
     --thread ${params.cpus}
 
-    echo ${params.manifest} >> software_versions.${task.process}.txt
-    fastp --version 2>> software_versions.${task.process}.txt
+    echo ${params.manifest} >> software_versions.FASTP_PAIRED.txt
+    fastp --version 2>> software_versions.FASTP_PAIRED.txt
     """
 }
 
@@ -50,7 +50,7 @@ process FASTP_SINGLE {
         tuple val(name), file("${fastq1.baseName}.trimmed.fq.gz"), emit: trimmed_fastqs
         file("${name}.fastp_stats.json")
         file("${name}.fastp_stats.html")
-        file("software_versions.${task.process}.txt")
+        file("software_versions.FASTP_SINGLE.txt")
 
     """
     # --input_files needs to be forced, otherwise it is inherited from profile in tests
@@ -61,7 +61,7 @@ process FASTP_SINGLE {
     --html ${name}.fastp_stats.html \
     --thread ${params.cpus}
 
-    echo ${params.manifest} >> software_versions.${task.process}.txt
-    fastp --version 2>> software_versions.${task.process}.txt
+    echo ${params.manifest} >> software_versions.FASTP_SINGLE.txt
+    fastp --version 2>> software_versions.FASTP_SINGLE.txt
     """
 }
