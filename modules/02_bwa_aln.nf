@@ -9,13 +9,14 @@ process BWA_ALN {
 
     input:
         tuple val(name), file(fastq)
+        val(reference)
 
     output:
         tuple val("${name}"), file("${fastq}"), file("${fastq.baseName}.sai"), emit: alignment_output
         file("software_versions.BWA_ALN.txt")
 
     """
-    bwa aln -t ${task.cpus} ${params.reference} ${fastq} > ${fastq.baseName}.sai
+    bwa aln -t ${task.cpus} ${reference} ${fastq} > ${fastq.baseName}.sai
 
     echo ${params.manifest} >> software_versions.BWA_ALN.txt
     echo "bwa=0.7.17"  >> software_versions.BWA_ALN.txt
@@ -34,13 +35,14 @@ process BWA_SAMPE {
     input:
       // joins both channels by key using the first element in the tuple, the name
       tuple val(name), file(fastq1), file(sai1), file(fastq2), file(sai2)
+      val(reference)
 
     output:
       tuple val("${name}"), file("${name}.bam"), emit: bams
       file("software_versions.BWA_SAMPE.txt")
 
     """
-    bwa sampe ${params.reference} ${sai1} ${sai2} ${fastq1} ${fastq2} | samtools view -uS - | samtools sort - > ${name}.bam
+    bwa sampe ${reference} ${sai1} ${sai2} ${fastq1} ${fastq2} | samtools view -uS - | samtools sort - > ${name}.bam
 
     echo ${params.manifest} >> software_versions.BWA_SAMPE.txt
     echo "bwa=0.7.17"  >> software_versions.BWA_SAMPE.txt
@@ -60,13 +62,14 @@ process BWA_SAMSE {
     input:
       // joins both channels by key using the first element in the tuple, the name
       tuple val(name), file(fastq), file(sai)
+      val(reference)
 
     output:
       tuple val("${name}"), file("${name}.bam"), emit: bams
       file("software_versions.BWA_SAMSE.txt")
 
     """
-    bwa samse ${params.reference} ${sai} ${fastq} | samtools view -uS - | samtools sort - > ${name}.bam
+    bwa samse ${reference} ${sai} ${fastq} | samtools view -uS - | samtools sort - > ${name}.bam
 
     echo ${params.manifest} >> software_versions.BWA_SAMSE.txt
     echo "bwa=0.7.17"  >> software_versions.BWA_SAMSE.txt
@@ -86,14 +89,15 @@ process BWA_ALN_INCEPTION {
     input:
       // joins both channels by key using the first element in the tuple, the name
       tuple val(name), file(fastq1), file(fastq2)
+      val(reference)
 
     output:
       tuple val("${name}"), file("${name}.bam"), emit: bams
       file("software_versions.BWA_ALN_INCEPTION.txt")
 
     """
-    bwa sampe ${params.reference} <( bwa aln -t ${params.cpus} ${params.reference} ${fastq1} ) \
-    <( bwa aln -t ${params.cpus} ${params.reference} ${fastq2} ) ${fastq1} ${fastq2} \
+    bwa sampe ${reference} <( bwa aln -t ${params.cpus} ${reference} ${fastq1} ) \
+    <( bwa aln -t ${params.cpus} ${reference} ${fastq2} ) ${fastq1} ${fastq2} \
     | samtools view -uS - | samtools sort - > ${name}.bam
 
     echo ${params.manifest} >> software_versions.BWA_ALN_INCEPTION.txt

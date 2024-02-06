@@ -10,13 +10,14 @@ process BWA_MEM_2 {
 
     input:
       tuple val(name), file(fastq1), file(fastq2)
+      val(reference)
 
     output:
       tuple val("${name}"), file("${name}.bam"), emit: bams
       file("software_versions.BWA_MEM_2.txt")
 
     """
-    bwa-mem2 mem ${params.additional_args} -t ${task.cpus} ${params.reference} ${fastq1} ${fastq2} | samtools view -uS - | samtools sort - > ${name}.bam
+    bwa-mem2 mem ${params.additional_args} -t ${task.cpus} ${reference} ${fastq1} ${fastq2} | samtools view -uS - | samtools sort - > ${name}.bam
 
     echo ${params.manifest} >> software_versions.BWA_MEM_2.txt
     bwa-mem2 version  >> software_versions.BWA_MEM_2.txt
@@ -36,13 +37,14 @@ process BWA_MEM_2_SE {
     input:
       // joins both channels by key using the first element in the tuple, the name
       tuple val(name), file(fastq)
+      val(reference)
 
     output:
       tuple val("${name}"), file("${name}.bam"), emit: bams
       file("software_versions.BWA_MEM_2_SE.txt")
 
     """
-    bwa-mem2 mem ${params.additional_args} -t ${task.cpus} ${params.reference} ${fastq} | samtools view -uS - | samtools sort - > ${name}.bam
+    bwa-mem2 mem ${params.additional_args} -t ${task.cpus} ${reference} ${fastq} | samtools view -uS - | samtools sort - > ${name}.bam
 
     echo ${params.manifest} >> software_versions.BWA_MEM_2_SE.txt
     bwa-mem2 version  >> software_versions.BWA_MEM_2_SE.txt

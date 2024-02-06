@@ -78,25 +78,25 @@ workflow {
 
         // alignment
         if (params.algorithm == "aln" && !params.inception) {
-            BWA_ALN(trimmed_fastqs.map {name, fq1, fq2 -> tuple(name, fq1)})
-            BWA_ALN_2(trimmed_fastqs.map {name, fq1, fq2 -> tuple(name, fq2)})
-            BWA_SAMPE(BWA_ALN.out.alignment_output.join(BWA_ALN_2.out.alignment_output))
+            BWA_ALN(trimmed_fastqs.map {name, fq1, fq2 -> tuple(name, fq1)},params.reference)
+            BWA_ALN_2(trimmed_fastqs.map {name, fq1, fq2 -> tuple(name, fq2)},params.reference)
+            BWA_SAMPE(BWA_ALN.out.alignment_output.join(BWA_ALN_2.out.alignment_output),params.reference)
             output_bams = BWA_SAMPE.out.bams
         }
         else if (params.algorithm == "aln" && params.inception) {
-            BWA_ALN_INCEPTION(trimmed_fastqs)
+            BWA_ALN_INCEPTION(trimmed_fastqs,params.reference)
             output_bams = BWA_ALN_INCEPTION.out.bams
         }
         else if (params.algorithm == "mem") {
-            BWA_MEM(trimmed_fastqs)
+            BWA_MEM(trimmed_fastqs,params.reference)
             output_bams = BWA_MEM.out.bams
         }
         else if (params.algorithm == "mem2") {
-            BWA_MEM_2(trimmed_fastqs)
+            BWA_MEM_2(trimmed_fastqs,params.reference)
             output_bams = BWA_MEM_2.out.bams
         }
         else if (params.algorithm == "star") {
-            STAR(trimmed_fastqs)
+            STAR(trimmed_fastqs,params.reference)
             output_bams = STAR.out.bams
         }
         else {
@@ -112,20 +112,20 @@ workflow {
             trimmed_fastqs = FASTP_SINGLE.out.trimmed_fastqs
         }
         if (params.algorithm == "aln"  && !params.inception) {
-            BWA_ALN(trimmed_fastqs)
+            BWA_ALN(trimmed_fastqs,params.reference)
             BWA_SAMSE(BWA_ALN.out.alignment_output)
             output_bams = BWA_SAMSE.out.bams
         }
         else if (params.algorithm == "mem") {
-            BWA_MEM_SE(trimmed_fastqs)
+            BWA_MEM_SE(trimmed_fastqs,params.reference)
             output_bams = BWA_MEM_SE.out.bams
         }
         else if (params.algorithm == "mem2") {
-            BWA_MEM_2_SE(trimmed_fastqs)
+            BWA_MEM_2_SE(trimmed_fastqs,params.reference)
             output_bams = BWA_MEM_2_SE.out.bams
         }
         else if (params.algorithm == "star") {
-            STAR_SE(trimmed_fastqs)
+            STAR_SE(trimmed_fastqs,params.reference)
             output_bams = STAR_SE.out.bams
         }
         else {

@@ -18,7 +18,7 @@ process STAR {
     script:
     two_pass_mode_param = params.star_two_pass_mode ? "--twopassMode Basic" : ""
     """
-    STAR --genomeDir ${params.reference} ${two_pass_mode_param} ${params.additional_args} \
+    STAR --genomeDir ${reference} ${two_pass_mode_param} ${params.additional_args} \
     --readFilesCommand "gzip -d -c -f" \
     --readFilesIn ${fastq1} ${fastq2} \
     --outSAMmode Full \
@@ -48,6 +48,7 @@ process STAR_SE {
 
     input:
       tuple val(name), file(fastq)
+      val(reference)
 
     output:
       tuple val("${name}"), file("${name}.bam"), emit: bams
@@ -56,7 +57,7 @@ process STAR_SE {
     script:
     two_pass_mode_param = params.star_two_pass_mode ? "--twopassMode Basic" : ""
     """
-    STAR --genomeDir ${params.reference} ${two_pass_mode_param} ${params.additional_args} \
+    STAR --genomeDir ${reference} ${two_pass_mode_param} ${params.additional_args} \
     --readFilesCommand "gzip -d -c -f" \
     --readFilesIn ${fastq} \
     --outSAMmode Full \
