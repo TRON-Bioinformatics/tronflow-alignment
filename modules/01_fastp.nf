@@ -6,7 +6,7 @@ process FASTP_PAIRED {
     publishDir "${params.output}", mode: "copy", pattern: "*fastp_stats*"
     publishDir "${params.output}/${name}/", mode: "copy", pattern: "software_versions.*"
 
-    conda (params.enable_conda ? "bioconda::fastp=0.20.1" : null)
+    conda (params.enable_conda ? "bioconda::fastp=0.23.4" : null)
 
     input:
         tuple val(name), file(fastq1), file(fastq2)
@@ -20,7 +20,7 @@ process FASTP_PAIRED {
 
     """
     # --input_files needs to be forced, otherwise it is inherited from profile in tests
-    fastp \
+    fastp ${params.fastp_args} \
     --in1 ${fastq1} \
     --in2 ${fastq2} \
     --out1 ${fastq1.baseName}.trimmed.fq.gz \
@@ -41,7 +41,7 @@ process FASTP_SINGLE {
     publishDir "${params.output}", mode: "copy", pattern: "*fastp_stats*"
     publishDir "${params.output}/${name}/", mode: "copy", pattern: "software_versions.*"
 
-    conda (params.enable_conda ? "bioconda::fastp=0.20.1" : null)
+    conda (params.enable_conda ? "bioconda::fastp=0.23.4" : null)
 
     input:
         tuple val(name), file(fastq1)
@@ -54,7 +54,7 @@ process FASTP_SINGLE {
 
     """
     # --input_files needs to be forced, otherwise it is inherited from profile in tests
-    fastp \
+    fastp ${params.fastp_args} \
     --in1 ${fastq1} \
     --out1 ${fastq1.baseName}.trimmed.fq.gz \
     --json ${name}.fastp_stats.json \
