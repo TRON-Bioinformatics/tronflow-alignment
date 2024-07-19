@@ -28,7 +28,6 @@ process STAR {
     --outReadsUnmapped Fastx \
     --outFilterMismatchNoverLmax 0.02 \
     --runThreadN ${task.cpus} \
-    --outSAMtype BAM SortedByCoordinate \
     --outFileNamePrefix ${name}.
 
     mv ${name}.Aligned.sortedByCoord.out.bam ${name}.bam
@@ -67,7 +66,6 @@ process STAR_SE {
     --outReadsUnmapped Fastx \
     --outFilterMismatchNoverLmax 0.02 \
     --runThreadN ${task.cpus} \
-    --outSAMtype BAM SortedByCoordinate \
     --outFileNamePrefix ${name}.
 
     mv ${name}.Aligned.sortedByCoord.out.bam ${name}.bam
