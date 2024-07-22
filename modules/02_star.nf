@@ -72,7 +72,7 @@ process STAR_SE {
     --runThreadN ${task.cpus} \
     --outFileNamePrefix ${name}.
 
-    mv ${name}.Aligned.sortedByCoord.out.bam ${name}.bam
+    mv ${name}.Aligned*.out.bam ${name}.bam
 
     echo ${params.manifest} >> software_versions.STAR_SE.txt
     STAR --version >> software_versions.STAR_SE.txt
