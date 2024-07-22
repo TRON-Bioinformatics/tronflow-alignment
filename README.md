@@ -57,6 +57,7 @@ Optional input:
     * inception: if enabled it uses an inception, only valid for BWA aln, it requires a fast file system such as flash (default: false)
     * skip_trimming: skips the read trimming step
     * star_two_pass_mode: activates STAR two-pass mode, increasing sensitivity of novel junction discovery, recommended for RNA variant calling (default: false)
+    * star_sort_by_coordinate: Sort STAR output BAM file by coordinate (default: false)
     * additional_args: additional alignment arguments, only effective in BWA mem, BWA mem 2 and STAR (default: none) 
 
 Output:
