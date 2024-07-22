@@ -18,6 +18,7 @@ process STAR {
 
     script:
     two_pass_mode_param = params.star_two_pass_mode ? "--twopassMode Basic" : ""
+    sort = params.star_sort_by_coordinate ? "SortedByCoordinate" : ""
     """
     STAR --genomeDir ${reference} ${two_pass_mode_param} ${params.additional_args} \
     --readFilesCommand "gzip -d -c -f" \
@@ -25,12 +26,13 @@ process STAR {
     --outSAMmode Full \
     --outSAMattributes Standard \
     --outSAMunmapped None \
+    --outSAMtype BAM ${sort} \
     --outReadsUnmapped Fastx \
     --outFilterMismatchNoverLmax 0.02 \
     --runThreadN ${task.cpus} \
     --outFileNamePrefix ${name}.
 
-    mv ${name}.Aligned.sortedByCoord.out.bam ${name}.bam
+    mv ${name}.Aligned*.out.bam ${name}.bam
 
     echo ${params.manifest} >> software_versions.STAR.txt
     STAR --version >> software_versions.STAR.txt
@@ -56,6 +58,7 @@ process STAR_SE {
 
     script:
     two_pass_mode_param = params.star_two_pass_mode ? "--twopassMode Basic" : ""
+    sort = params.star_sort_by_coordinate ? "SortedByCoordinate" : ""
     """
     STAR --genomeDir ${reference} ${two_pass_mode_param} ${params.additional_args} \
     --readFilesCommand "gzip -d -c -f" \
@@ -63,12 +66,13 @@ process STAR_SE {
     --outSAMmode Full \
     --outSAMattributes Standard \
     --outSAMunmapped None \
+    --outSAMtype BAM ${sort} \
     --outReadsUnmapped Fastx \
     --outFilterMismatchNoverLmax 0.02 \
     --runThreadN ${task.cpus} \
     --outFileNamePrefix ${name}.
 
-    mv ${name}.Aligned.sortedByCoord.out.bam ${name}.bam
+    mv ${name}.Aligned*.out.bam ${name}.bam
 
     echo ${params.manifest} >> software_versions.STAR_SE.txt
     STAR --version >> software_versions.STAR_SE.txt
