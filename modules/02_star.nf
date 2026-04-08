@@ -18,7 +18,7 @@ process STAR {
 
     script:
     two_pass_mode_param = params.star_two_pass_mode ? "--twopassMode Basic" : ""
-    sort = params.star_sort_by_coordinate ? "SortedByCoordinate" : ""
+    sort = params.star_sort_by_coordinate ? "SortedByCoordinate" : "Unsorted"
     """
     STAR --genomeDir ${reference} ${two_pass_mode_param} ${params.additional_args} \
     --readFilesCommand "gzip -d -c -f" \
@@ -58,7 +58,7 @@ process STAR_SE {
 
     script:
     two_pass_mode_param = params.star_two_pass_mode ? "--twopassMode Basic" : ""
-    sort = params.star_sort_by_coordinate ? "SortedByCoordinate" : ""
+    sort = params.star_sort_by_coordinate ? "SortedByCoordinate" : "Unsorted"
     """
     STAR --genomeDir ${reference} ${two_pass_mode_param} ${params.additional_args} \
     --readFilesCommand "gzip -d -c -f" \
