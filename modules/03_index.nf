@@ -16,7 +16,17 @@ process INDEX_BAM {
       file("software_versions.INDEX_BAM.txt")
 
     """
-    samtools index -@ ${task.cpus} ${bam}
+
+    samtools sort \
+    -@ ${task.cpus} \
+    -o ${name}.sorted.bam ${bam}
+
+    samtools index \
+    -@ ${task.cpus} ${name}.sorted.bam 
+
+    mv ${name}.sorted.bam.bai ${name}.bam.bai
+  
+    rm -f ${name}.sorted.bam
 
     echo ${params.manifest} >> software_versions.INDEX_BAM.txt
     samtools --version >> software_versions.INDEX_BAM.txt
