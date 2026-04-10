@@ -32,7 +32,13 @@ process STAR {
     --runThreadN ${task.cpus} \
     --outFileNamePrefix ${name}.
 
-    mv ${name}.Aligned*.out.bam ${name}.bam
+    # Handle sorting conditionally
+    if [ "${sort}" = "Unsorted" ]; then
+        samtools sort -@ ${task.cpus} -o ${name}.Aligned.SamtoolsSorted.out.bam ${name}.Aligned.out.bam
+        mv ${name}.Aligned.SamtoolsSorted.out.bam ${name}.bam
+    else
+        mv ${name}.Aligned.sortedByCoord.out.bam ${name}.bam
+    fi
 
     echo ${params.manifest} >> software_versions.STAR.txt
     STAR --version >> software_versions.STAR.txt
@@ -58,7 +64,7 @@ process STAR_SE {
 
     script:
     two_pass_mode_param = params.star_two_pass_mode ? "--twopassMode Basic" : ""
-    sort = params.star_sort_by_coordinate ? "SortedByCoordinate" : ""
+    sort = params.star_sort_by_coordinate ? "SortedByCoordinate" : "Unsorted"
     """
     STAR --genomeDir ${reference} ${two_pass_mode_param} ${params.additional_args} \
     --readFilesCommand "gzip -d -c -f" \
@@ -72,7 +78,13 @@ process STAR_SE {
     --runThreadN ${task.cpus} \
     --outFileNamePrefix ${name}.
 
-    mv ${name}.Aligned*.out.bam ${name}.bam
+    # Handle sorting conditionally
+    if [ "${sort}" = "Unsorted" ]; then
+        samtools sort -@ ${task.cpus} -o ${name}.Aligned.SamtoolsSorted.out.bam ${name}.Aligned.out.bam
+        mv ${name}.Aligned.SamtoolsSorted.out.bam ${name}.bam
+    else
+        mv ${name}.Aligned.sortedByCoord.out.bam ${name}.bam
+    fi
 
     echo ${params.manifest} >> software_versions.STAR_SE.txt
     STAR --version >> software_versions.STAR_SE.txt
